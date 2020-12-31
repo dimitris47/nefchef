@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>604</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>NefChef</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="nefchef.qrc">
+    <normaloff>:/icons/nefchef.png</normaloff>:/icons/nefchef.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout"/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Αρχείο</string>
+    </property>
+    <addaction name="actionOpenRecipe"/>
+    <addaction name="actionDrop"/>
+    <addaction name="actionSaveRecipe"/>
+    <addaction name="actionSaveRecipeAs"/>
+    <addaction name="action_export_to_pdf"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Βοήθεια</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="actionInfo"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Επεξεργασία</string>
+    </property>
+    <addaction name="actionRemoveColumn"/>
+    <addaction name="actionAddColumn"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddIngredient"/>
+    <addaction name="actionRemove"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddFromList"/>
+    <addaction name="separator"/>
+    <addaction name="actionFont"/>
+    <addaction name="actionToggleToolbar"/>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Καρτέλα</string>
+    </property>
+    <addaction name="actionStart"/>
+    <addaction name="actionEditor"/>
+    <addaction name="actionCalculator"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuWindow"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>22</width>
+     <height>22</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpenRecipe"/>
+   <addaction name="actionDrop"/>
+   <addaction name="actionSaveRecipe"/>
+   <addaction name="actionSaveRecipeAs"/>
+   <addaction name="action_export_to_pdf"/>
+   <addaction name="separator"/>
+   <addaction name="actionStart"/>
+   <addaction name="actionEditor"/>
+   <addaction name="actionCalculator"/>
+   <addaction name="separator"/>
+   <addaction name="actionAddFromList"/>
+   <addaction name="actionAddIngredient"/>
+   <addaction name="actionRemove"/>
+   <addaction name="actionMoveUp"/>
+   <addaction name="actionMoveDown"/>
+   <addaction name="separator"/>
+   <addaction name="actionRemoveColumn"/>
+   <addaction name="actionAddColumn"/>
+   <addaction name="separator"/>
+   <addaction name="actionFont"/>
+   <addaction name="actionHelp"/>
+   <addaction name="actionInfo"/>
+  </widget>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/application-exit.png</normaloff>:/icons/application-exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Κλείσιμο</string>
+   </property>
+   <property name="toolTip">
+    <string>Έξοδος από το πρόγραμμα</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/system-help.png</normaloff>:/icons/system-help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Οδηγίες χρήσης</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionInfo">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/dialog-information.png</normaloff>:/icons/dialog-information.png</iconset>
+   </property>
+   <property name="text">
+    <string>Πληροφορίες</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionEditor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Συντάκτης Υλικών</string>
+   </property>
+   <property name="toolTip">
+    <string>Καρτέλα Συντάκτη Υλικών</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
+  </action>
+  <action name="actionCalculator">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/accessories-calculator.png</normaloff>:/icons/accessories-calculator.png</iconset>
+   </property>
+   <property name="text">
+    <string>Συνταγογράφος</string>
+   </property>
+   <property name="toolTip">
+    <string>Καρτέλα Συνταγογράφου</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/edit-delete.png</normaloff>:/icons/edit-delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Αφαίρεση Επιλεγμένων</string>
+   </property>
+   <property name="toolTip">
+    <string>Αφαίρεση επιλεγμένων συστατικών από τη συλλογή</string>
+   </property>
+  </action>
+  <action name="actionAddIngredient">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/edit-add.png</normaloff>:/icons/edit-add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Προσθήκη Νέου Συστατικού</string>
+   </property>
+   <property name="toolTip">
+    <string>Προσθήκη Νέου Συστατικού</string>
+   </property>
+  </action>
+  <action name="actionAddColumn">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/format-indent-more.png</normaloff>:/icons/format-indent-more.png</iconset>
+   </property>
+   <property name="text">
+    <string>Αύξηση Στηλών</string>
+   </property>
+   <property name="toolTip">
+    <string>Αύξηση Στηλών</string>
+   </property>
+  </action>
+  <action name="actionRemoveColumn">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/format-indent-less.png</normaloff>:/icons/format-indent-less.png</iconset>
+   </property>
+   <property name="text">
+    <string>Μείωση Στηλών</string>
+   </property>
+   <property name="toolTip">
+    <string>Μείωση Στηλών</string>
+   </property>
+  </action>
+  <action name="actionDrop">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/list-add.png</normaloff>:/icons/list-add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Νέα συνταγή</string>
+   </property>
+   <property name="toolTip">
+    <string>Δημιουργία νέας συνταγής από λίστα υλικών</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionAddFromList">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/add-property.png</normaloff>:/icons/add-property.png</iconset>
+   </property>
+   <property name="text">
+    <string>Προσθήκη υλικού από λίστα</string>
+   </property>
+  </action>
+  <action name="actionFont">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/applications-font.png</normaloff>:/icons/applications-font.png</iconset>
+   </property>
+   <property name="text">
+    <string>Γραμματοσειρά</string>
+   </property>
+   <property name="toolTip">
+    <string>Επιλογή Γραμματοσειράς</string>
+   </property>
+  </action>
+  <action name="actionToggleToolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Προβολή μπάρας εργαλείων</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="action_export_to_pdf">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/application-pdf.png</normaloff>:/icons/application-pdf.png</iconset>
+   </property>
+   <property name="text">
+    <string>Εξαγωγή Συνταγής σε PDF</string>
+   </property>
+   <property name="toolTip">
+    <string>Εξαγωγή Συνταγής σε PDF</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionSaveRecipeAs">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/document-save-as.png</normaloff>:/icons/document-save-as.png</iconset>
+   </property>
+   <property name="text">
+    <string>Αποθήκευη Συνταγής Ως</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionOpenRecipe">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/document-open.png</normaloff>:/icons/document-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Άνοιγμα Συνταγής</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/nefchef.png</normaloff>:/icons/nefchef.png</iconset>
+   </property>
+   <property name="text">
+    <string>Αρχική Σελίδα</string>
+   </property>
+   <property name="toolTip">
+    <string>Μετάβαση στην Αρχική Σελίδα</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionMoveUp">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/go-up.png</normaloff>:/icons/go-up.png</iconset>
+   </property>
+   <property name="text">
+    <string>Μετακίνηση επάνω</string>
+   </property>
+  </action>
+  <action name="actionMoveDown">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/go-down.png</normaloff>:/icons/go-down.png</iconset>
+   </property>
+   <property name="text">
+    <string>Μετακίνηση κάτω</string>
+   </property>
+  </action>
+  <action name="actionSaveRecipe">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/document-save.png</normaloff>:/icons/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Αποθήκευση συνταγής</string>
+   </property>
+   <property name="toolTip">
+    <string>Αποθήκευση Συνταγής</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="nefchef.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=NefChef
+#Name[el_GR]=
+Comment=A cookbook creator with embedded calories calculator
+#Comment[el_GR]=
+Exec=nefchef
+MimeType=application/cal
+MimeType=application/rcp
+Icon=nefchef.png
+Terminal=false
+Categories=Utility;
+Keywords=Recipe;Chef;Calories;DP Software;QT;

@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/nefchef.png</file>
+        <file>combined.cal</file>
+        <file>instructions.txt</file>
+        <file>icons/application-pdf.png</file>
+        <file>icons/edit.png</file>
+        <file>icons/accessories-calculator.png</file>
+        <file>icons/accessories-dictionary.png</file>
+        <file>icons/accessories-text-editor.png</file>
+        <file>icons/add-property.png</file>
+        <file>icons/application-exit.png</file>
+        <file>icons/applications-font.png</file>
+        <file>icons/dialog-information.png</file>
+        <file>icons/document-open.png</file>
+        <file>icons/document-save.png</file>
+        <file>icons/document-save-as.png</file>
+        <file>icons/edit-add.png</file>
+        <file>icons/edit-delete.png</file>
+        <file>icons/format-indent-less.png</file>
+        <file>icons/format-indent-more.png</file>
+        <file>icons/help-about.png</file>
+        <file>icons/list-add.png</file>
+        <file>icons/system-help.png</file>
+        <file>icons/view-sort-ascending.png</file>
+        <file>icons/nefchef.ico</file>
+        <file>icons/go-down.png</file>
+        <file>icons/go-up.png</file>
+    </qresource>
+</RCC>
