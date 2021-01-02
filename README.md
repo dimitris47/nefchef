@@ -29,8 +29,3 @@ b. Debian systems:
 <code>sudo dpkg -i nefchef-$VERSION_NUMBER.deb</code>
 
 You might need to install the <code>libqt5gui5</code> package before running the <code>.deb</code> file.
-
-
-- MAC SYSTEMS:
-
-Download and run the <code>nefchef.app.zip</code> file. You need to have XCode and Qt installed on your system beforehand.
