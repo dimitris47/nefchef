@@ -139,6 +139,7 @@
    <addaction name="actionFont"/>
    <addaction name="actionHelp"/>
    <addaction name="actionInfo"/>
+   <addaction name="actionAdaptor"/>
   </widget>
   <action name="actionExit">
    <property name="icon">
@@ -410,6 +411,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionAdaptor">
+   <property name="text">
+    <string>Adaptor</string>
    </property>
   </action>
  </widget>

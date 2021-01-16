@@ -7,6 +7,7 @@ VERSION = 1.0
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
+    adaptor.cpp \
     collectioneditorwidget.cpp \
     combo.cpp \
     droplist.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
     startpage.cpp
 
 HEADERS += \
+    adaptor.h \
     collectioneditorwidget.h \
     collectionpage.h \
     combo.h \
@@ -35,6 +37,7 @@ HEADERS += \
     startpage.h
 
 FORMS += \
+    adaptor.ui \
     combo.ui \
     droplist.ui \
     helpdialog.ui \

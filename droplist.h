@@ -5,9 +5,7 @@
 #include <QListWidget>
 #include "ingredients.h"
 
-namespace Ui {
-class DropList;
-}
+namespace Ui { class DropList; }
 
 class DropList : public QDialog {
     Q_OBJECT

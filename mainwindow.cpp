@@ -18,6 +18,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "adaptor.h"
 #include "collectioneditorwidget.h"
 #include "combo.h"
 #include "droplist.h"
@@ -89,14 +90,14 @@ MainWindow::MainWindow(QWidget *parent) :
         if (cols > 1)
             setColumnNumber(editor->columns() - 1);
     });
-    connect(ui->actionStart,         &QAction::triggered, this, &MainWindow::showStart);
-    connect(ui->actionCalculator,    &QAction::triggered, this, &MainWindow::showCalculator);
-    connect(ui->actionEditor,        &QAction::triggered, this, &MainWindow::showEditor);
-    connect(ui->actionDrop,          &QAction::triggered, this, &MainWindow::showDropList);
-    connect(ui->actionHelp,          &QAction::triggered, this, &MainWindow::helpPopup);
-    connect(ui->actionInfo,          &QAction::triggered, this, &MainWindow::infoPopup);
-    connect(ui->actionExit,          &QAction::triggered, this, &MainWindow::close);
-    connect(ui->actionFont,          &QAction::triggered, this, &MainWindow::selectFont);
+    connect(ui->actionStart,      &QAction::triggered, this, &MainWindow::showStart);
+    connect(ui->actionCalculator, &QAction::triggered, this, &MainWindow::showCalculator);
+    connect(ui->actionEditor,     &QAction::triggered, this, &MainWindow::showEditor);
+    connect(ui->actionDrop,       &QAction::triggered, this, &MainWindow::showDropList);
+    connect(ui->actionHelp,       &QAction::triggered, this, &MainWindow::helpPopup);
+    connect(ui->actionInfo,       &QAction::triggered, this, &MainWindow::infoPopup);
+    connect(ui->actionExit,       &QAction::triggered, this, &MainWindow::close);
+    connect(ui->actionFont,       &QAction::triggered, this, &MainWindow::selectFont);
 
     ui->actionToggleToolbar->setChecked(true);
     readSettings();
@@ -176,25 +177,15 @@ void MainWindow::calcDescend(int i) {
         statusBar()->showMessage(tr("Δεν είναι δυνατή η ταυτόχρονη μετακίνηση πολλαπλών στοιχείων"));
 }
 
-void MainWindow::updateCalc() {
-    calculator->updateDisplay();
-}
+void MainWindow::updateCalc() { calculator->updateDisplay(); }
 
-void MainWindow::startOpen() {
-    on_actionOpenRecipe_triggered();
-}
+void MainWindow::startOpen() { on_actionOpenRecipe_triggered(); }
 
-void MainWindow::startCreate() {
-    showDropList();
-}
+void MainWindow::startCreate() { showDropList(); }
 
-void MainWindow::startHelp() {
-    helpPopup();
-}
+void MainWindow::startHelp() { helpPopup(); }
 
-void MainWindow::startInfo() {
-    infoPopup();
-}
+void MainWindow::startInfo() { infoPopup(); }
 
 void MainWindow::on_actionToggleToolbar_toggled(bool arg1) {
     if (arg1==true)
@@ -673,4 +664,20 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         settings.setValue("size", QApplication::font().pointSize());
     }
     event->accept();
+}
+
+void MainWindow::on_actionAdaptor_triggered() {
+    Adaptor adaptor;
+    int ret = adaptor.exec();
+    if (ret == QDialog::Rejected)
+        return;
+    auto lines = calculator->findChildren<QLineEdit *>();
+    for (auto line : lines) {
+        if (line->text().isNull())
+            line->setText("0");
+        else {
+            int newMass = line->text().toInt() * adaptor.getFrac();
+            line->setText(QString::number(newMass));
+        }
+    }
 }
