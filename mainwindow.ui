@@ -64,15 +64,16 @@
     <property name="title">
      <string>Επεξεργασία</string>
     </property>
-    <addaction name="actionRemoveColumn"/>
-    <addaction name="actionAddColumn"/>
-    <addaction name="separator"/>
-    <addaction name="actionAddIngredient"/>
-    <addaction name="actionRemove"/>
     <addaction name="separator"/>
     <addaction name="actionAddFromList"/>
+    <addaction name="actionAddIngredient"/>
+    <addaction name="actionRemove"/>
+    <addaction name="actionAdaptor"/>
     <addaction name="separator"/>
+    <addaction name="actionAddColumn"/>
+    <addaction name="actionRemoveColumn"/>
     <addaction name="actionFont"/>
+    <addaction name="separator"/>
     <addaction name="actionToggleToolbar"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
@@ -132,10 +133,11 @@
    <addaction name="actionRemove"/>
    <addaction name="actionMoveUp"/>
    <addaction name="actionMoveDown"/>
+   <addaction name="actionAdaptor"/>
    <addaction name="separator"/>
-   <addaction name="actionRemoveColumn"/>
+   <addaction name="separator"/>
    <addaction name="actionAddColumn"/>
-   <addaction name="separator"/>
+   <addaction name="actionRemoveColumn"/>
    <addaction name="actionFont"/>
    <addaction name="actionHelp"/>
    <addaction name="actionInfo"/>
@@ -410,6 +412,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionAdaptor">
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/volume.png</normaloff>:/icons/volume.png</iconset>
+   </property>
+   <property name="text">
+    <string>Αναπροσαρμογή δοσολογίας</string>
+   </property>
+   <property name="toolTip">
+    <string>Αλλάξτε μαζικά τις δοσολογίες</string>
    </property>
   </action>
  </widget>

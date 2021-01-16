@@ -56,6 +56,7 @@ private:
 private slots:
     void helpPopup();
     void infoPopup();
+    void on_actionAdaptor_triggered();
     void on_actionAddFromList_triggered();
     void on_action_export_to_pdf_triggered();
     void on_actionMoveUp_triggered();
