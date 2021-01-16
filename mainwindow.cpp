@@ -594,6 +594,22 @@ void MainWindow::on_actionOpenRecipe_triggered() {
     recipeIngrs.clear();
 }
 
+void MainWindow::on_actionAdaptor_triggered() {
+    Adaptor adaptor;
+    int ret = adaptor.exec();
+    if (ret == QDialog::Rejected)
+        return;
+    auto lines = calculator->findChildren<QLineEdit *>();
+    for (auto line : lines) {
+        if (line->text().isNull())
+            line->setText("0");
+        else {
+            int newMass = line->text().toInt() * adaptor.getFrac();
+            line->setText(QString::number(newMass));
+        }
+    }
+}
+
 void MainWindow::helpPopup() {
     QFile file(":/instructions.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -664,20 +680,4 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         settings.setValue("size", QApplication::font().pointSize());
     }
     event->accept();
-}
-
-void MainWindow::on_actionAdaptor_triggered() {
-    Adaptor adaptor;
-    int ret = adaptor.exec();
-    if (ret == QDialog::Rejected)
-        return;
-    auto lines = calculator->findChildren<QLineEdit *>();
-    for (auto line : lines) {
-        if (line->text().isNull())
-            line->setText("0");
-        else {
-            int newMass = line->text().toInt() * adaptor.getFrac();
-            line->setText(QString::number(newMass));
-        }
-    }
 }
