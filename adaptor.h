@@ -12,6 +12,8 @@ public:
     explicit Adaptor(QWidget *parent = nullptr);
     ~Adaptor();
     double getFrac() const { return frac;}
+    double getNum() const { return num;}
+    double getDen() const { return den;}
 
 private slots:
     void on_buttonBox_accepted();
@@ -19,6 +21,8 @@ private slots:
 private:
     Ui::Adaptor *ui;
     double frac;
+    double num;
+    double den;
 };
 
 #endif // ADAPTOR_H

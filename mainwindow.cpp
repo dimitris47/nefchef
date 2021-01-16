@@ -604,8 +604,14 @@ void MainWindow::on_actionAdaptor_triggered() {
         if (line->text().isNull())
             line->setText("0");
         else {
-            int newMass = line->text().toInt() * adaptor.getFrac();
-            line->setText(QString::number(newMass));
+            if (!adaptor.getDen() || adaptor.getDen()==0 || !adaptor.getNum() || adaptor.getNum()==0) {
+                statusBar()->showMessage(tr("Άκυρη μετατροπή"), 4000);
+                return;
+            }
+            else {
+                int newMass = line->text().toInt() * adaptor.getFrac();
+                line->setText(QString::number(newMass));
+            }
         }
     }
 }
