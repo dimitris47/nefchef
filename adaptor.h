@@ -11,9 +11,9 @@ class Adaptor : public QDialog {
 public:
     explicit Adaptor(QWidget *parent = nullptr);
     ~Adaptor();
-    double getFrac() const { return frac;}
-    double getNum() const { return num;}
-    double getDen() const { return den;}
+    double getFrac() const { return frac; }
+    double getNum() const { return num; }
+    double getDen() const { return den; }
 
 private slots:
     void on_buttonBox_accepted();

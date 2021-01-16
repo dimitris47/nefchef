@@ -227,7 +227,7 @@ void MainWindow::showDropList() {
         }
     }
 
-    DropList drop;
+    DropList drop(this);
     int ret = drop.exec();
     if (ret == QDialog::Rejected)
         return;
@@ -247,8 +247,13 @@ void MainWindow::showDropList() {
 }
 
 void MainWindow::on_actionAddFromList_triggered() {
-    Combo combo;
-    combo.exec();
+    Combo combo(this);
+    int ret = combo.exec();
+    if (ret==QDialog::Rejected) {
+        auto widgets = editor->findChildren<QLineEdit *>();
+        if (widgets.isEmpty())
+            return;
+    }
     currentFile = ":/temp.rcp";
     editor->addNew(combo.getNewIng());
     editor->added();
@@ -595,7 +600,7 @@ void MainWindow::on_actionOpenRecipe_triggered() {
 }
 
 void MainWindow::on_actionAdaptor_triggered() {
-    Adaptor adaptor;
+    Adaptor adaptor(this);
     int ret = adaptor.exec();
     if (ret == QDialog::Rejected)
         return;

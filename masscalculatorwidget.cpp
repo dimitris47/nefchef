@@ -145,8 +145,6 @@ void MassCalculatorWidget::updateDisplay() {
     if (lineEdits.count() >= lastMasses.count())
         for (int i=0; i<lastMasses.count(); i++)
             lineEdits.at(i)->setText(lastMasses.at(i));
-    else
-        qWarning() << "lines and masses count discrepancy";
 }
 
 void MassCalculatorWidget::updateMasses(QStringList masses) {
@@ -217,8 +215,6 @@ void MassCalculatorWidget::updateMasses(QStringList masses) {
     if (lineEdits.count() >= masses.count())
         for (int i=0; i<masses.count(); i++)
             lineEdits.at(i)->setText(masses.at(i));
-    else
-        qWarning() << "lines and masses count discrepancy";
 }
 
 void MassCalculatorWidget::addIngr(QString name) {
@@ -296,6 +292,4 @@ void MassCalculatorWidget::addIngr(QString name) {
     if (lineEdits.count() >= lastMasses.count())
         for (int i=0; i<lastMasses.count(); i++)
             lineEdits.at(i)->setText(lastMasses.at(i));
-    else
-        qWarning() << "lines and masses count discrepancy";
 }
