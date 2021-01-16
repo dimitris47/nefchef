@@ -26,5 +26,6 @@
         <file>icons/nefchef.ico</file>
         <file>icons/go-down.png</file>
         <file>icons/go-up.png</file>
+        <file>icons/volume.png</file>
     </qresource>
 </RCC>
