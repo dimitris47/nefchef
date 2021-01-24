@@ -83,6 +83,7 @@ void CollectionEditorWidget::added() {
     auto lines = findChildren<QLineEdit *>();
     newName = lines.at(lines.count()-2)->text();
     emit itemAdded(newName);
+    lines.at(lines.count()-1)->setFocus();
 }
 
 void CollectionEditorWidget::addNew(Ingredient ingr) {
