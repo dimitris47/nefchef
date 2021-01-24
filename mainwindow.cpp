@@ -147,7 +147,7 @@ void MainWindow::calcClimb(int i) {
         QStringList masses;
         for (auto line : lines)
             masses.append(line->text());
-        #if QT_VERSION >= 0x050C00
+        #if QT_VERSION >= 0x050E02
             masses.swapItemsAt(i, i-1);
         #else
             masses.swap(i, i-1);
@@ -165,7 +165,7 @@ void MainWindow::calcDescend(int i) {
         QStringList masses;
         for (auto line : lines)
             masses.append(line->text());
-        #if QT_VERSION >= 0x050C00
+        #if QT_VERSION >= 0x050E02
             masses.swapItemsAt(i, i+1);
         #else
             masses.swap(i, i+1);

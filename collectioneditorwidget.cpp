@@ -130,7 +130,7 @@ void CollectionEditorWidget::moveUp() {
     }
     for (int i=1; i<caloriesWidgets.count(); i++)
         if (caloriesWidgets.at(i)->isSelected()) {
-            #if QT_VERSION >= 0x050C00
+            #if QT_VERSION >= 0x050E02
                 _tmpIngredients.swapItemsAt(i, i-1);
             #else
                 _tmpIngredients.swap(i, i-1);
@@ -156,7 +156,7 @@ void CollectionEditorWidget::moveDown() {
     }
     for (int i=0; i<caloriesWidgets.count()-1; i++)
         if (caloriesWidgets.at(i)->isSelected()) {
-            #if QT_VERSION >= 0x050C00
+            #if QT_VERSION >= 0x050E02
                 _tmpIngredients.swapItemsAt(i, i+1);
             #else
                 _tmpIngredients.swap(i, i+1);
