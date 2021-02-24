@@ -647,7 +647,7 @@ void MainWindow::infoPopup() {
                    "Written in C++, built with the Qt5 toolkit<br/><br/>"
                    "Published under the GNU General Public License v3.0<br/>"
                    "Qt Libraries used under (L)GPLv3<br/><br/>"
-                   "&copy; Dimitris Psathas 2020")));
+                   "&copy; 2020-2021 Dimitris Psathas")));
 }
 
 void MainWindow::readSettings() {

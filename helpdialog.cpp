@@ -27,6 +27,5 @@ HelpDialog::HelpDialog(QWidget *parent) : QDialog(parent), ui(new Ui::HelpDialog
 HelpDialog::~HelpDialog() { delete ui; }
 
 void HelpDialog::setText(const QString &text) {
-    ui->textBrowser->setCurrentFont(QFont("consolas,ubuntu mono,courier new,noto mono,monospace",12));
     ui->textBrowser->setText(text);
 }

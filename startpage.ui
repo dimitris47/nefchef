@@ -26,7 +26,7 @@
       <string>Δημιουργία νέας συνταγής</string>
      </property>
      <property name="icon">
-      <iconset resource="CaloriesCPP.qrc">
+      <iconset resource="nefchef.qrc">
        <normaloff>:/icons/list-add.png</normaloff>:/icons/list-add.png</iconset>
      </property>
      <property name="iconSize">
@@ -49,7 +49,7 @@
       <string>Άνοιγμα συνταγής</string>
      </property>
      <property name="icon">
-      <iconset resource="CaloriesCPP.qrc">
+      <iconset resource="nefchef.qrc">
        <normaloff>:/icons/document-open.png</normaloff>:/icons/document-open.png</iconset>
      </property>
      <property name="iconSize">
@@ -72,7 +72,7 @@
       <string>Πληροφορίες προγράμματος</string>
      </property>
      <property name="icon">
-      <iconset resource="CaloriesCPP.qrc">
+      <iconset resource="nefchef.qrc">
        <normaloff>:/icons/dialog-information.png</normaloff>:/icons/dialog-information.png</iconset>
      </property>
      <property name="iconSize">
@@ -95,7 +95,7 @@
       <string>Οδηγίες χρήσης</string>
      </property>
      <property name="icon">
-      <iconset resource="CaloriesCPP.qrc">
+      <iconset resource="nefchef.qrc">
        <normaloff>:/icons/system-help.png</normaloff>:/icons/system-help.png</iconset>
      </property>
      <property name="iconSize">
@@ -109,7 +109,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="CaloriesCPP.qrc"/>
+  <include location="nefchef.qrc"/>
  </resources>
  <connections/>
 </ui>
