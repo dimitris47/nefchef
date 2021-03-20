@@ -50,14 +50,14 @@ Combo::Combo(QWidget *parent) : QDialog(parent), ui(new Ui::Combo) {
                 QString extline = extdata.readLine();
                 extIngr.append(extline);
             }
-            for (QString line : extIngr)
+            for (auto &&line : extIngr)
                 if (!combolist.contains(line)) {
                     combolist.append(line);
                 }
         }
     }
     combolist.sort();
-    for (QString item : combolist)
+    for (auto &&item : combolist)
         ui->comboBox->addItem(item);
 
     auto completer = new QCompleter(combolist, Q_NULLPTR);

@@ -66,7 +66,7 @@ bool loadData(const QString &fileName) {
 bool loadList(const QStringList &list) {
     ingredients.clear();
     _errorString = QObject::tr("Δεν υπάρχουν δεδομένα");
-    for (auto line : list)
+    for (auto &&line : list)
         if (!insertString(line))
             return false;
     return ingredients.size();
@@ -84,7 +84,7 @@ bool saveData(const QString &fileName) {
     data.setGenerateByteOrderMark(true);
     data.setIntegerBase(10);
     data << preamble;
-    for (auto ingredient : ingredients)
+    for (auto &&ingredient : ingredients)
         data << ingredient.name() << " = " << ingredient.calories() << '\n';
 
     // enum QTextStream::Status -- QTextStream::Ok = 0

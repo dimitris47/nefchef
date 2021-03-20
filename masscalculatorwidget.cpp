@@ -50,7 +50,7 @@ MassCalculatorWidget::~MassCalculatorWidget() { delete ui; }
 void MassCalculatorWidget::calculation() {
     int masssum {0};
     float kcalsum {0};
-    for (auto lineEdit : lineEdits) {
+    for (auto &&lineEdit : lineEdits) {
         int mass = lineEdit->text().toInt();
         masssum += mass;
         kcalsum += lineEdit->calories() * mass / 100.0;
@@ -65,7 +65,7 @@ void MassCalculatorWidget::calculation() {
 }
 
 void MassCalculatorWidget::clear() {
-    for (QLineEdit* lineEdit : lineEdits)
+    for (auto &&lineEdit : lineEdits)
         lineEdit->setText("");
     ui->kcalcount->setText("0 kCal");
     ui->masscount->setText("0 g");
@@ -78,11 +78,11 @@ void MassCalculatorWidget::updateDisplay() {
 
     auto lastLines = findChildren<QLineEdit *>();
     QStringList lastMasses;
-    for (auto line : lastLines)
+    for (auto &&line : lastLines)
         lastMasses.append(line->text());
     QRegularExpression re("^ing.*$");
     auto caloriesWidgets = findChildren<QWidget *>(re);
-    for (auto widget : caloriesWidgets)
+    for (auto &&widget : caloriesWidgets)
         widget->close();
     ui->caloriesGridLayout->invalidate();
     lineEdits.clear();
@@ -152,7 +152,7 @@ void MassCalculatorWidget::updateMasses(QStringList masses) {
 
     QRegularExpression re("^ing.*$");
     auto caloriesWidgets = findChildren<QWidget *>(re);
-    for (auto widget : caloriesWidgets)
+    for (auto &&widget : caloriesWidgets)
         widget->close();
     ui->caloriesGridLayout->invalidate();
     lineEdits.clear();
@@ -222,11 +222,11 @@ void MassCalculatorWidget::addIngr(QString name) {
 
     auto lastLines = findChildren<QLineEdit *>();
     QStringList lastMasses;
-    for (auto line : lastLines)
+    for (auto &&line : lastLines)
         lastMasses.append(line->text());
     QRegularExpression re("^ing.*$");
     auto caloriesWidgets = findChildren<QWidget *>(re);
-    for (auto widget : caloriesWidgets)
+    for (auto &&widget : caloriesWidgets)
         widget->close();
     ui->caloriesGridLayout->invalidate();
     lineEdits.clear();

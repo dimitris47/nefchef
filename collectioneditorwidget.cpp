@@ -41,7 +41,7 @@ void CollectionEditorWidget::updateDisplay() {
     setUpdatesEnabled(false); // to avoid screen flicker
 
     auto caloriesWidgets = findChildren<IngredientWidget *>();
-    for (auto widget : caloriesWidgets)
+    for (auto &&widget : caloriesWidgets)
         widget->close();
     caloriesGridLayout->invalidate();
 
@@ -100,22 +100,26 @@ void CollectionEditorWidget::addNew(Ingredient ingr) {
 }
 
 void CollectionEditorWidget::removeSelected() {
-    QList<int> selections;
-    auto caloriesWidgets = findChildren<IngredientWidget *>();
-    for (auto widget : caloriesWidgets)
-        if (widget->isSelected())
-            selections.append(caloriesWidgets.indexOf(widget));
-    if (selections.count() == caloriesWidgets.count())
-        selections.clear();
+    if (_modified) {
+        QList<int> selections;
+        auto caloriesWidgets = findChildren<IngredientWidget *>();
+        for (auto &&widget : caloriesWidgets)
+            if (widget->isSelected())
+                selections.append(caloriesWidgets.indexOf(widget));
+        if (selections.count() == caloriesWidgets.count())
+            selections.clear();
+        else
+            for (auto &&widget : caloriesWidgets)
+                if (widget->isSelected()) {
+                    _tmpIngredients.removeOne(widget->ingredient());
+                    updateDisplay();
+                    Ingredients::ingredients = _tmpIngredients;
+                    _modified = true;
+                }
+        emit itemRemoved(selections);
+    }
     else
-        for (auto widget : caloriesWidgets)
-            if (widget->isSelected()) {
-                _tmpIngredients.removeOne(widget->ingredient());
-                updateDisplay();
-                Ingredients::ingredients = _tmpIngredients;
-                _modified = true;
-            }
-    emit itemRemoved(selections);
+        return;
 }
 
 void CollectionEditorWidget::moveUp() {

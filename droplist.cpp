@@ -44,7 +44,7 @@ DropList::DropList(QWidget *parent) : QDialog(parent), ui(new Ui::DropList) {
             QString extline = extdata.readLine();
             extIngr.append(extline);
         }
-        for (auto line : extIngr)
+        for (auto &&line : extIngr)
             if (!combolist.contains(line)) {
                 ui->listWidget->addItem(line);
                 combolist.append(line);
@@ -69,7 +69,7 @@ void DropList::read(const QString& filename) {
         return;
     QTextStream reader(&file);
     reader.setCodec(QTextCodec::codecForName("UTF-8"));
-    while(!reader.atEnd()) {
+    while (!reader.atEnd()) {
         QString line = reader.readLine();
         ui->listWidget->addItem(line);
         combolist.append(line);

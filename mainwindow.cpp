@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     editorActions->addAction(ui->actionRemoveColumn);
     editorActions->setEnabled(false);
 
-    connect(stackedWidget,           &QStackedWidget::currentChanged, [=](int page) {
+    connect(stackedWidget, &QStackedWidget::currentChanged, [=](int page) {
         editorActions->setEnabled(page == 2);
     });
     connect(ui->actionAddIngredient, &QAction::triggered, editor, &CollectionEditorWidget::addIngredient);
@@ -111,6 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(start,  &StartPage::help,                       this, &MainWindow::startHelp);
     connect(start,  &StartPage::info,                       this, &MainWindow::startInfo);
     connect(start,  &StartPage::open,                       this, &MainWindow::startOpen);
+
     showStart();
 }
 
@@ -124,7 +125,7 @@ MainWindow::~MainWindow() {
 void MainWindow::calcRemove(QList<int> selections) {
     QList<QLineEdit *> lines = calculator->findChildren<QLineEdit *>();
     QStringList masses;
-    for (auto line : lines)
+    for (auto &&line : lines)
         masses.append(line->text());
     if (selections.count() == 0)
         statusBar()->showMessage(tr("Για αφαίρεση όλων των στοιχείων δημιουργήστε νέα συνταγή"));
@@ -145,7 +146,7 @@ void MainWindow::calcClimb(int i) {
     if (i!=-1) {
         QList<QLineEdit *> lines = calculator->findChildren<QLineEdit *>();
         QStringList masses;
-        for (auto line : lines)
+        for (auto &&line : lines)
             masses.append(line->text());
         #if QT_VERSION >= 0x050E02
             masses.swapItemsAt(i, i-1);
@@ -163,7 +164,7 @@ void MainWindow::calcDescend(int i) {
     if (i>=0) {
         QList<QLineEdit *> lines = calculator->findChildren<QLineEdit *>();
         QStringList masses;
-        for (auto line : lines)
+        for (auto &&line : lines)
             masses.append(line->text());
         #if QT_VERSION >= 0x050E02
             masses.swapItemsAt(i, i+1);
@@ -204,11 +205,17 @@ void MainWindow::selectFont() {
     QApplication::setFont(QFontDialog::getFont(0, QApplication::font()));
 }
 
-void MainWindow::showStart() { stackedWidget->setCurrentWidget(start); }
+void MainWindow::showStart() {
+    stackedWidget->setCurrentWidget(start);
+    ui->actionAdaptor->setEnabled(false);
+}
 
 void MainWindow::showCalculator() { stackedWidget->setCurrentWidget(calculator); }
 
-void MainWindow::showEditor() { stackedWidget->setCurrentWidget(editor); }
+void MainWindow::showEditor() {
+    stackedWidget->setCurrentWidget(editor);
+    ui->actionAdaptor->setEnabled(true);
+}
 
 void MainWindow::showDropList() {
     if (editor->isModified() || calculator->isModified()) {
@@ -264,7 +271,7 @@ void MainWindow::openRecipe(const QString &fileName) {
     QStringList masses;
     editor->_tmpIngredients.clear();
     Ingredients::ingredients.clear();
-    for (const QString &ingr : recipeIngrs) {
+    for (auto &&ingr : recipeIngrs) {
         QStringList items = ingr.split(" > ");
         QString name = items[0];
         int calories = items[1].toInt();
@@ -276,7 +283,7 @@ void MainWindow::openRecipe(const QString &fileName) {
     }
 
     auto caloriesWidgets = findChildren<IngredientWidget *>();
-    for (auto widget : caloriesWidgets)
+    for (auto &&widget : caloriesWidgets)
         widget->close();
     editor->setColumns(1);
     editor->updateDisplay();
@@ -309,7 +316,7 @@ QString writeableDir() {
     QStringList locations = (QStringList()
                              << QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)
                              << QStandardPaths::standardLocations(QStandardPaths::HomeLocation));
-    for (const QString &loc : locations)
+    for (auto &&loc : locations)
         if (QFileInfo::exists(loc)) {
             dir = loc;
             return dir;
@@ -382,7 +389,7 @@ void MainWindow::updateExtendedList() {
     QTextStream data(&file);
     data.setCodec(QTextCodec::codecForName("UTF-8"));
     data.setIntegerBase(10);
-    for (auto ingredient : newIngr)
+    for (auto &&ingredient : newIngr)
         if (!extIngr.contains(ingredient) && !combIngr.contains(ingredient))
             data << ingredient.name() << " = " << ingredient.calories() << '\n';
     file.close();
@@ -399,13 +406,13 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     QStringList lineData;
     auto labelsList = calculator->findChildren<QLabel *>();
     auto linesList = calculator->findChildren<QLineEdit *>();
-    for (auto line : linesList)
+    for (auto &&line : linesList)
         if (line->text()!="") {
             lineData.append(line->text());
             labelData.append(labelsList[linesList.indexOf(line)+editor->columns()+6]->text());
         }
-    for (auto widget : caloriesWidgets)
-        for (auto label : labelData)
+    for (auto &&widget : caloriesWidgets)
+        for (auto &&label : labelData)
             if (widget.name().startsWith(label))
                 kcalList.append(widget.calories());
 
@@ -416,7 +423,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
         fileName.append(".pdf");
     QPrinter printer(QPrinter::PrinterResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setPaperSize(QPrinter::A4);
+    printer.setPageSize(QPageSize(QPageSize::A4));
     printer.setOutputFileName(fileName);
 
     QStringList ingrList;
@@ -425,7 +432,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
         ingrList.append("<span>&#8226; " + ingr + "</span>");
     }
     QStringList instrList;
-    for (const QString &line : calculator->instruct->toPlainText().split("\n"))
+    for (auto &&line : calculator->instruct->toPlainText().split("\n"))
         instrList.append("<span>&#8226; " + line + "</span>");
 
     QTextDocument doc;
@@ -486,11 +493,11 @@ void MainWindow::on_actionSaveRecipe_triggered() {
             QList<int> kcalList;
             QStringList labelData;
             QStringList lineData;
-            for (auto widget : caloriesWidgets) {
+            for (auto &&widget : caloriesWidgets) {
                 labelData.append(widget.name());
                 kcalList.append(widget.calories());
             }
-            for (auto mass : masses)
+            for (auto &&mass : masses)
                 lineData.append(mass->text());
             if (lineData.count()!=labelData.count())
                 return;
@@ -503,7 +510,7 @@ void MainWindow::on_actionSaveRecipe_triggered() {
             data.setCodec(QTextCodec::codecForName("UTF-8"));
             data.setGenerateByteOrderMark(true);
             data.setIntegerBase(10);
-            for (const QString &ingredient : ingrs)
+            for (auto &&ingredient : ingrs)
                 data << ingredient << '\n';
             if (data.status() != QTextStream::Ok) {
                 qWarning() << tr("error saving %1").arg(currentFile);
@@ -529,11 +536,11 @@ void MainWindow::on_actionSaveRecipeAs_triggered() {
         QList<int> kcalList;
         QStringList labelData;
         QStringList lineData;
-        for (auto widget : caloriesWidgets) {
+        for (auto &&widget : caloriesWidgets) {
             labelData.append(widget.name());
             kcalList.append(widget.calories());
         }
-        for (auto mass : masses)
+        for (auto &&mass : masses)
             lineData.append(mass->text());
         if (lineData.count()!=labelData.count())
             return;
@@ -605,7 +612,7 @@ void MainWindow::on_actionAdaptor_triggered() {
     if (ret == QDialog::Rejected)
         return;
     auto lines = calculator->findChildren<QLineEdit *>();
-    for (auto line : lines) {
+    for (auto &&line : lines) {
         if (line->text().isNull())
             line->setText("0");
         else {
