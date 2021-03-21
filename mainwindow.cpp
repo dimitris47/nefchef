@@ -302,6 +302,7 @@ void MainWindow::openRecipe(const QString &fileName) {
                    .arg(fileName.startsWith(':') ? " [Preset]" : ""));
 
     calculator->instruct->setPlainText(instr.join("\n"));
+    calculator->instruct->verticalScrollBar()->setValue(0);
     showCalculator();
     ui->actionCalculator->setChecked(true);
     ui->actionStart->setChecked(false);
@@ -428,7 +429,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
 
     QStringList ingrList;
     for (int i=0; i<labelData.count(); i++) {
-        QString ingr = labelData[i] + ": " + lineData[i];
+        QString ingr = lineData[i] + " γρ. " + labelData[i];
         ingrList.append("<span>&#8226; " + ingr + "</span>");
     }
     QStringList instrList;
@@ -437,9 +438,19 @@ void MainWindow::on_action_export_to_pdf_triggered() {
 
     QTextDocument doc;
     QFileInfo fi(fileName);
-    doc.setHtml("<p style='text-align: right'> Σύνολο: " + labelsList[1]->text() + "<br/>" + labelsList[5]->text() + "</p>" + "<br/>" \
-                + "<b>" + fi.baseName() + "</b>" + "<br/><br/>" + ingrList.join(" γρ.<br/>") + " γρ." \
-                + "<br/><br/>" + "Οδηγίες εκτέλεσης:"+ "<br/>" + instrList.join("<br/>"));
+
+    QString stdText = "<p style='text-align: right'>Σύνολο: " + labelsList[1]->text() + "<br/>" + labelsList[5]->text() + "</p>" \
+                + "<p style='text-align: center'><b><h2>" + fi.baseName() + "</b></h2></p>" \
+                + "<p style='line-height:120%'><br/><u>Υλικά:</u><br/>" + ingrList.join("<br/>") + "</p><br/>";
+
+    QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>") + "</p>";
+
+    QString fullText = stdText + instrText;
+
+    if (!calculator->instruct->toPlainText().isEmpty())
+        doc.setHtml(fullText);
+    else
+        doc.setHtml(stdText);
     doc.print(&printer);
     ingrList.clear();
 }
@@ -506,6 +517,7 @@ void MainWindow::on_actionSaveRecipe_triggered() {
                 ingrs.append(ingr);
             }
             ingrs.append("#\n" + calculator->instruct->toPlainText());
+
             QTextStream data(&file);
             data.setCodec(QTextCodec::codecForName("UTF-8"));
             data.setGenerateByteOrderMark(true);
@@ -518,6 +530,7 @@ void MainWindow::on_actionSaveRecipe_triggered() {
             }
             file.commit();
             calculator->updateDisplay();
+            calculator->calculation();
             editor->setModified(false);
             calculator->setModified(false);
             statusBar()->showMessage(Ingredients::errorString());
@@ -607,8 +620,8 @@ void MainWindow::on_actionOpenRecipe_triggered() {
 }
 
 void MainWindow::on_actionAdaptor_triggered() {
-    Adaptor adaptor(this);
-    int ret = adaptor.exec();
+    Adaptor *adaptor = new Adaptor;
+    int ret = adaptor->exec();
     if (ret == QDialog::Rejected)
         return;
     auto lines = calculator->findChildren<QLineEdit *>();
@@ -616,12 +629,12 @@ void MainWindow::on_actionAdaptor_triggered() {
         if (line->text().isNull())
             line->setText("0");
         else {
-            if (!adaptor.getDen() || adaptor.getDen()==0 || !adaptor.getNum() || adaptor.getNum()==0) {
+            if (!adaptor->getDen() || adaptor->getDen()==0 || !adaptor->getNum() || adaptor->getNum()==0) {
                 statusBar()->showMessage(tr("Άκυρη μετατροπή"), 4000);
                 return;
             }
             else {
-                int newMass = line->text().toInt() * adaptor.getFrac();
+                int newMass = line->text().toInt() * adaptor->getFrac();
                 line->setText(QString::number(newMass));
             }
         }
