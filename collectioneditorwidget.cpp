@@ -102,6 +102,8 @@ void CollectionEditorWidget::addNew(Ingredient ingr) {
 void CollectionEditorWidget::removeSelected() {
     QList<int> selections;
     auto caloriesWidgets = findChildren<IngredientWidget *>();
+    if (caloriesWidgets.count() == 0)
+        return;
     for (auto &&widget : caloriesWidgets)
         if (widget->isSelected())
             selections.append(caloriesWidgets.indexOf(widget));
