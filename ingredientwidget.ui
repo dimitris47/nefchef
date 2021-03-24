@@ -30,29 +30,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="checkBoxSelect">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Επιλογή για μετακίνηση/διαγραφή&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="statusTip">
-      <string>Επιλέξτε για μετακίνηση ή διαγραφή</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QLineEdit" name="lineEditCalories">
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="placeholderText">
-      <string>Θερμίδες ανά 100γρ</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="2">
     <widget class="QLabel" name="labelHeader">
      <property name="sizePolicy">
@@ -66,6 +43,29 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLineEdit" name="lineEditCalories">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="placeholderText">
+      <string>Θερμίδες ανά 100γρ</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="checkBoxSelect">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Επιλογή για μετακίνηση/διαγραφή&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="statusTip">
+      <string>Επιλέξτε για μετακίνηση ή διαγραφή</string>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>

@@ -100,26 +100,22 @@ void CollectionEditorWidget::addNew(Ingredient ingr) {
 }
 
 void CollectionEditorWidget::removeSelected() {
-    if (_modified) {
-        QList<int> selections;
-        auto caloriesWidgets = findChildren<IngredientWidget *>();
-        for (auto &&widget : caloriesWidgets)
-            if (widget->isSelected())
-                selections.append(caloriesWidgets.indexOf(widget));
-        if (selections.count() == caloriesWidgets.count())
-            selections.clear();
-        else
-            for (auto &&widget : caloriesWidgets)
-                if (widget->isSelected()) {
-                    _tmpIngredients.removeOne(widget->ingredient());
-                    updateDisplay();
-                    Ingredients::ingredients = _tmpIngredients;
-                    _modified = true;
-                }
-        emit itemRemoved(selections);
-    }
+    QList<int> selections;
+    auto caloriesWidgets = findChildren<IngredientWidget *>();
+    for (auto &&widget : caloriesWidgets)
+        if (widget->isSelected())
+            selections.append(caloriesWidgets.indexOf(widget));
+    if (selections.count() == caloriesWidgets.count())
+        selections.clear();
     else
-        return;
+        for (auto &&widget : caloriesWidgets)
+            if (widget->isSelected()) {
+                _tmpIngredients.removeOne(widget->ingredient());
+                updateDisplay();
+                Ingredients::ingredients = _tmpIngredients;
+                _modified = true;
+            }
+    emit itemRemoved(selections);
 }
 
 void CollectionEditorWidget::moveUp() {

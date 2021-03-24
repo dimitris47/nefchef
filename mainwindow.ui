@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -218,21 +218,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+2</string>
-   </property>
-  </action>
-  <action name="actionRemove">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="nefchef.qrc">
-     <normaloff>:/icons/edit-delete.png</normaloff>:/icons/edit-delete.png</iconset>
-   </property>
-   <property name="text">
-    <string>Αφαίρεση Επιλεγμένων</string>
-   </property>
-   <property name="toolTip">
-    <string>Αφαίρεση επιλεγμένων συστατικών από τη συλλογή</string>
    </property>
   </action>
   <action name="actionAddIngredient">
@@ -424,6 +409,21 @@
    </property>
    <property name="toolTip">
     <string>Αλλάξτε μαζικά τις δοσολογίες</string>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/edit-delete.png</normaloff>:/icons/edit-delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Αφαίρεση Επιλεγμένων</string>
+   </property>
+   <property name="toolTip">
+    <string>Αφαίρεση επιλεγμένων συστατικών από τη συλλογή</string>
    </property>
   </action>
  </widget>
