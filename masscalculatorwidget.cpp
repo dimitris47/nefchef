@@ -58,7 +58,6 @@ void MassCalculatorWidget::calculation() {
     float percentsum {0};
     if (masssum)
         percentsum = kcalsum*100/masssum;
-    // Set count labels
     ui->kcalcount->setText(QString::number(qRound(kcalsum)) + " kCal");
     ui->masscount->setText(QString::number(masssum) + " g");
     ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
@@ -88,7 +87,7 @@ void MassCalculatorWidget::updateDisplay() {
     lineEdits.clear();
 
     int rowsPerColumn = qCeil(static_cast<float>(Ingredients::ingredients.size()) / columns());
-    for (int i=0; i<columns(); i++) {
+    for (int i = 0; i < columns(); i++) {
         int column = columns() * i + 1;
         QLabel *label = new QLabel(this);
         label->setObjectName(QString::fromUtf8("ingHeader") + QString::number(i));
@@ -105,7 +104,7 @@ void MassCalculatorWidget::updateDisplay() {
         ui->caloriesGridLayout->addWidget(vline, 0, column + 1, rowsPerColumn + 1, 1);
     }
 
-    for (int i=0; i<Ingredients::ingredients.size(); i++) {
+    for (int i = 0; i < Ingredients::ingredients.size(); i++) {
         int column = (i / rowsPerColumn);
         int row = i % rowsPerColumn + 1;
         QLabel *label = new QLabel(this);
@@ -143,7 +142,7 @@ void MassCalculatorWidget::updateDisplay() {
     setUpdatesEnabled(true);
     clear();
     if (lineEdits.count() >= lastMasses.count())
-        for (int i=0; i<lastMasses.count(); i++)
+        for (int i = 0; i < lastMasses.count(); i++)
             lineEdits.at(i)->setText(lastMasses.at(i));
 }
 
@@ -158,7 +157,7 @@ void MassCalculatorWidget::updateMasses(QStringList masses) {
     lineEdits.clear();
 
     int rowsPerColumn = qCeil(static_cast<float>(Ingredients::ingredients.size()) / columns());
-    for (int i=0; i<columns(); i++) {
+    for (int i = 0; i < columns(); i++) {
         int column = columns() * i + 1;
         QLabel *label = new QLabel(this);
         label->setObjectName(QString::fromUtf8("ingHeader") + QString::number(i));
@@ -175,7 +174,7 @@ void MassCalculatorWidget::updateMasses(QStringList masses) {
         ui->caloriesGridLayout->addWidget(vline, 0, column + 1, rowsPerColumn + 1, 1);
     }
 
-    for (int i=0; i<Ingredients::ingredients.size(); i++) {
+    for (int i = 0; i < Ingredients::ingredients.size(); i++) {
         int column = (i / rowsPerColumn);
         int row = i % rowsPerColumn + 1;
         QLabel *label = new QLabel(this);
@@ -232,7 +231,7 @@ void MassCalculatorWidget::addIngr(QString name) {
     lineEdits.clear();
 
     int rowsPerColumn = qCeil(static_cast<float>(Ingredients::ingredients.size()) / columns());
-    for (int i=0; i<columns(); i++) {
+    for (int i = 0; i < columns(); i++) {
         int column = columns() * i + 1;
         QLabel *label = new QLabel(this);
         label->setObjectName(QString::fromUtf8("ingHeader") + QString::number(i));
@@ -249,7 +248,7 @@ void MassCalculatorWidget::addIngr(QString name) {
         ui->caloriesGridLayout->addWidget(vline, 0, column + 1, rowsPerColumn + 1, 1);
     }
 
-    for (int i=0; i<Ingredients::ingredients.size(); i++) {
+    for (int i = 0; i < Ingredients::ingredients.size(); i++) {
         int column = (i / rowsPerColumn);
         int row = i % rowsPerColumn + 1;
         QLabel *label = new QLabel(this);

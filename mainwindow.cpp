@@ -130,7 +130,7 @@ void MainWindow::calcRemove(QList<int> selections) {
     if (selections.count() == 0)
         statusBar()->showMessage(tr("Για αφαίρεση όλων των στοιχείων δημιουργήστε νέα συνταγή"));
     else
-        for (int i=0; i<selections.count(); i++)
+        for (int i = 0; i < selections.count(); i++)
             masses.removeAt(selections.at(i)-i);
     calculator->updateMasses(masses);
     calculator->calculation();
@@ -161,7 +161,7 @@ void MainWindow::calcClimb(int i) {
 }
 
 void MainWindow::calcDescend(int i) {
-    if (i>=0) {
+    if (i >= 0) {
         QList<QLineEdit *> lines = calculator->findChildren<QLineEdit *>();
         QStringList masses;
         for (auto &&line : lines)
@@ -408,7 +408,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     auto labelsList = calculator->findChildren<QLabel *>();
     auto linesList = calculator->findChildren<QLineEdit *>();
     for (auto &&line : linesList)
-        if (line->text()!="") {
+        if (!line->text().isEmpty()) {
             lineData.append(line->text());
             labelData.append(labelsList[linesList.indexOf(line)+editor->columns()+6]->text());
         }
@@ -428,7 +428,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     printer.setOutputFileName(fileName);
 
     QStringList ingrList;
-    for (int i=0; i<labelData.count(); i++) {
+    for (int i = 0; i < labelData.count(); i++) {
         QString ingr = lineData[i] + " γρ. " + labelData[i];
         ingrList.append("<span>&#8226; " + ingr + "</span>");
     }
@@ -442,9 +442,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     QString stdText = "<p style='text-align: right'>Σύνολο: " + labelsList[1]->text() + "<br/>" + labelsList[5]->text() + "</p>" \
                 + "<p style='text-align: center'><b><h2>" + fi.baseName() + "</b></h2></p>" \
                 + "<p style='line-height:120%'><br/><u>Υλικά:</u><br/>" + ingrList.join("<br/>") + "</p><br/>";
-
     QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>") + "</p>";
-
     QString fullText = stdText + instrText;
 
     if (!calculator->instruct->toPlainText().isEmpty())
@@ -472,7 +470,7 @@ void MainWindow::saveRecipeFile(QStringList ingrs) {
     data.setCodec(QTextCodec::codecForName("UTF-8"));
     data.setGenerateByteOrderMark(true);
     data.setIntegerBase(10);
-    for (const QString &ingredient : ingrs)
+    for (auto &&ingredient : ingrs)
         data << ingredient << '\n';
     if (data.status() != QTextStream::Ok) {
         qWarning() << tr("error saving %1").arg(fileName);
@@ -558,7 +556,7 @@ void MainWindow::on_actionSaveRecipeAs_triggered() {
         if (lineData.count()!=labelData.count())
             return;
     
-        for (int i=0; i<labelData.count(); i++) {
+        for (int i = 0; i < labelData.count(); i++) {
             QString ingr = labelData[i] + " > " + QString::number(kcalList[i]) + " > " + lineData[i];
             ingrs.append(ingr);
         }

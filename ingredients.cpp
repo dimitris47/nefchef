@@ -73,7 +73,7 @@ bool loadList(const QStringList &list) {
 }
 
 bool saveData(const QString &fileName) {
-    _errorString=QString();
+    _errorString = QString();
     QSaveFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
         _errorString = QObject::tr("Σφάλμα ανοίγματος αρχείου: %1").arg(file.errorString());

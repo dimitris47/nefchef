@@ -46,7 +46,7 @@ void CollectionEditorWidget::updateDisplay() {
     caloriesGridLayout->invalidate();
 
     int rowsPerColumn = qCeil(static_cast<float>(_tmpIngredients.size()) / columns());
-    for (int i=0; i<_tmpIngredients.size(); i++) {
+    for (int i = 0; i < _tmpIngredients.size(); i++) {
         int column = (i / rowsPerColumn);
         int row = i % rowsPerColumn;
         auto ingr = _tmpIngredients.at(i);
@@ -125,14 +125,14 @@ void CollectionEditorWidget::removeSelected() {
 void CollectionEditorWidget::moveUp() {
     auto caloriesWidgets = findChildren<IngredientWidget *>();
     int count {0};
-    for (int i=1; i<caloriesWidgets.count(); i++)
+    for (int i = 1; i < caloriesWidgets.count(); i++)
         if (caloriesWidgets.at(i)->isSelected())
             count++;
     if (count>1) {
         emit itemClimbed(-1);
         return;
     }
-    for (int i=1; i<caloriesWidgets.count(); i++)
+    for (int i = 1; i < caloriesWidgets.count(); i++)
         if (caloriesWidgets.at(i)->isSelected()) {
             #if QT_VERSION >= 0x050E02
                 _tmpIngredients.swapItemsAt(i, i-1);
@@ -144,21 +144,21 @@ void CollectionEditorWidget::moveUp() {
             _modified = true;
             emit itemClimbed(i);
             auto boxes = findChildren<QCheckBox *>();
-            boxes[i+boxes.count()/2-1]->setChecked(true);
+            boxes.at(i+boxes.count()/2-1)->setChecked(true);
         }
 }
 
 void CollectionEditorWidget::moveDown() {
     auto caloriesWidgets = findChildren<IngredientWidget *>();
     int count {0};
-    for (int i=0; i<caloriesWidgets.count()-1; i++)
+    for (int i = 0; i < caloriesWidgets.count()-1; i++)
         if (caloriesWidgets.at(i)->isSelected())
             count++;
     if (count>1) {
         emit itemDescended(-1);
         return;
     }
-    for (int i=0; i<caloriesWidgets.count()-1; i++)
+    for (int i = 0; i < caloriesWidgets.count()-1; i++)
         if (caloriesWidgets.at(i)->isSelected()) {
             #if QT_VERSION >= 0x050E02
                 _tmpIngredients.swapItemsAt(i, i+1);
@@ -170,6 +170,6 @@ void CollectionEditorWidget::moveDown() {
             _modified = true;
             emit itemDescended(i);
             auto boxes = findChildren<QCheckBox *>();
-            boxes[i+boxes.count()/2+1]->setChecked(true);
+            boxes.at(i+boxes.count()/2+1)->setChecked(true);
         }
 }

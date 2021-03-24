@@ -10,9 +10,9 @@ class IngredientData;
 class Ingredient {
 public:
     Ingredient();
-    Ingredient(const QString& name, int calories);
-    Ingredient(const Ingredient &);
-    Ingredient &operator=(const Ingredient &);
+    Ingredient(const QString &name, int calories);
+    Ingredient(const Ingredient&);
+    Ingredient &operator=(const Ingredient&);
     ~Ingredient();
 
     void setName(const QString &name);
@@ -25,11 +25,11 @@ private:
     QSharedDataPointer<IngredientData> d;
 };
 
-inline bool operator==(const Ingredient& lhs, const Ingredient& rhs) {
+inline bool operator==(const Ingredient &lhs, const Ingredient &rhs) {
     return lhs.name().toLower() == rhs.name().toLower() && lhs.calories() == rhs.calories();
 }
 
-inline bool operator<(const Ingredient& lhs, const Ingredient& rhs) {
+inline bool operator<(const Ingredient &lhs, const Ingredient &rhs) {
     return lhs.name() < rhs.name();
 }
 
