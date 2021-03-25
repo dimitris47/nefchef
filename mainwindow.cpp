@@ -241,8 +241,8 @@ void MainWindow::showDropList() {
     if (Ingredients::loadList(drop.selectedItems())) {
         editor->_tmpIngredients = Ingredients::ingredients;
         setColumnNumber(editor->columnsHint());
-        setWindowTitle(QString("%1 - %2").arg(QApplication::applicationName())
-                       .arg(tr("[Προσωρινό Αρχείο]")));
+        setWindowTitle(QString("%1 - %2").arg(QApplication::applicationName(),
+                       tr("[Προσωρινό Αρχείο]")));
         currentFile = ":/temp.rcp";
     }
     else
@@ -297,9 +297,9 @@ void MainWindow::openRecipe(const QString &fileName) {
 
     QFileInfo fi(fileName);
     currentFile = fileName;
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName())
-                   .arg(fi.fileName())
-                   .arg(fileName.startsWith(':') ? " [Preset]" : ""));
+    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
+                   fi.fileName(),
+                   fileName.startsWith(':') ? " [Preset]" : ""));
 
     calculator->instruct->setPlainText(instr.join("\n"));
     calculator->instruct->verticalScrollBar()->setValue(0);
@@ -478,9 +478,9 @@ void MainWindow::saveRecipeFile(QStringList ingrs) {
     }
     file.commit();
     currentFile = fileName;
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName())
-                   .arg(fi.fileName())
-                   .arg(fileName.startsWith(':') ? " [Preset]" : ""));
+    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
+                   fi.fileName(),
+                   fileName.startsWith(':') ? " [Preset]" : ""));
 }
 
 void MainWindow::on_actionSaveRecipe_triggered() {
@@ -590,9 +590,9 @@ void MainWindow::on_actionOpenRecipe_triggered() {
     if (fileName.isEmpty())
         return;
     QFileInfo fi(fileName);
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName())
-                   .arg(fi.fileName())
-                   .arg(fileName.startsWith(':') ? " [Preset]" : ""));
+    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
+                   fi.fileName(),
+                   fileName.startsWith(':') ? " [Preset]" : ""));
 
     QFile data(fileName);
     if (!data.open(QIODevice::ReadOnly | QIODevice::Text)) {
