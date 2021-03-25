@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     editorActions->addAction(ui->actionRemoveColumn);
     editorActions->setEnabled(false);
 
-    connect(stackedWidget, &QStackedWidget::currentChanged, [=](int page) {
+    connect(stackedWidget, &QStackedWidget::currentChanged, this, [=](int page) {
         editorActions->setEnabled(page == 2);
     });
     connect(ui->actionAddIngredient, &QAction::triggered, editor, &CollectionEditorWidget::addIngredient);
