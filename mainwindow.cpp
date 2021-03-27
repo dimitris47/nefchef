@@ -348,6 +348,7 @@ void MainWindow::updateExtendedList() {
     QFile comb(":/combined.cal");
     if (!comb.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
+
     QTextStream in(&comb);
     in.setCodec(QTextCodec::codecForName("UTF-8"));
     QList<Ingredient> combIngr;
@@ -365,7 +366,8 @@ void MainWindow::updateExtendedList() {
 
     QFile ext(dataDir.path() + "/extended.cal");
     if (!ext.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
+        if (!ext.open(QIODevice::Append | QIODevice::Text))
+            return;
     QTextStream extdata(&ext);
     extdata.setCodec(QTextCodec::codecForName("UTF-8"));
     QList<Ingredient> extIngr;
@@ -713,5 +715,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         settings.setValue("font", QApplication::font().toString());
         settings.setValue("size", QApplication::font().pointSize());
     }
+    updateExtendedList();
     event->accept();
 }
