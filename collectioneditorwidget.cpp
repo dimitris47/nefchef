@@ -58,7 +58,7 @@ void CollectionEditorWidget::updateDisplay() {
         if (row == 0)
             widget->setHeaderVisible(true);
         caloriesGridLayout->addWidget(widget, row, column * columns());
-        connect(widget, &IngredientWidget::ingredientChanged, [=](const Ingredient& ingr) {
+        connect(widget, &IngredientWidget::ingredientChanged, this, [=](const Ingredient& ingr) {
             _tmpIngredients.replace(i, ingr);
             _modified = true;
         });

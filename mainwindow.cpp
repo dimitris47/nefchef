@@ -433,8 +433,12 @@ void MainWindow::on_action_export_to_pdf_triggered() {
         ingrList.append("<span>&#8226; " + ingr + "</span>");
     }
     QStringList instrList;
-    for (auto &&line : calculator->instruct->toPlainText().split("\n"))
-        instrList.append("<span>&#8226; " + line + "</span>");
+    for (auto &&line : calculator->instruct->toPlainText().split("\n")) {
+        if (line.isEmpty())
+            instrList.append(line);
+        else
+            instrList.append("<span>&#8226; " + line + "</span>");
+    }
 
     QTextDocument doc;
     QFileInfo fi(fileName);
