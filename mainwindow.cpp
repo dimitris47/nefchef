@@ -432,6 +432,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
         QString ingr = lineData[i] + " γρ. " + labelData[i];
         ingrList.append("<span>&#8226; " + ingr + "</span>");
     }
+
     QStringList instrList;
     for (auto &&line : calculator->instruct->toPlainText().split("\n")) {
         if (line.isEmpty())
