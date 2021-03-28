@@ -460,121 +460,6 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     ingrList.clear();
 }
 
-void MainWindow::saveRecipeFile(QStringList ingrs) {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Αποθήκευση"), writeableDir(),
-                                                    QString("Recipies (*.rcp);;Text files (*.txt);;All files (*.*)"));
-    if (fileName.isEmpty())
-        return;
-    QFileInfo fi(fileName);
-    if (fi.suffix().isEmpty())
-        fileName += ".rcp";
-    QSaveFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
-        qWarning() << tr("error opening %1").arg(fileName);
-        return;
-    }
-    QTextStream data(&file);
-    data.setCodec(QTextCodec::codecForName("UTF-8"));
-    data.setGenerateByteOrderMark(true);
-    data.setIntegerBase(10);
-    for (auto &&ingredient : ingrs)
-        data << ingredient << '\n';
-    if (data.status() != QTextStream::Ok) {
-        qWarning() << tr("error saving %1").arg(fileName);
-        return;
-    }
-    file.commit();
-    currentFile = fileName;
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
-                   fi.fileName(),
-                   fileName.startsWith(':') ? " [Preset]" : ""));
-}
-
-void MainWindow::on_actionSaveRecipe_triggered() {
-    if (currentFile.isEmpty() || currentFile.startsWith(':'))
-        on_actionSaveRecipeAs_triggered();
-    else {
-        if (editor->isModified())
-            updateExtendedList();
-        Ingredients::ingredients = editor->_tmpIngredients;
-        QSaveFile file(currentFile);
-        if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
-            qWarning() << QObject::tr("Σφάλμα ανοίγματος αρχείου: %1").arg(file.errorString());
-            return;
-        }
-        else {
-            ingrs.clear();
-            auto caloriesWidgets = editor->_tmpIngredients;
-            auto masses = calculator->findChildren<QLineEdit *>();
-            QList<int> kcalList;
-            QStringList labelData;
-            QStringList lineData;
-            for (auto &&widget : caloriesWidgets) {
-                labelData.append(widget.name());
-                kcalList.append(widget.calories());
-            }
-            for (auto &&mass : masses)
-                lineData.append(mass->text());
-            if (lineData.count()!=labelData.count())
-                return;
-            for (int i=0; i<labelData.count(); i++) {
-                QString ingr = labelData[i] + " > " + QString::number(kcalList[i]) + " > " + lineData[i];
-                ingrs.append(ingr);
-            }
-            ingrs.append("#\n" + calculator->instruct->toPlainText());
-
-            QTextStream data(&file);
-            data.setCodec(QTextCodec::codecForName("UTF-8"));
-            data.setGenerateByteOrderMark(true);
-            data.setIntegerBase(10);
-            for (auto &&ingredient : ingrs)
-                data << ingredient << '\n';
-            if (data.status() != QTextStream::Ok) {
-                qWarning() << tr("error saving %1").arg(currentFile);
-                return;
-            }
-            file.commit();
-            calculator->updateDisplay();
-            calculator->calculation();
-            editor->setModified(false);
-            calculator->setModified(false);
-            statusBar()->showMessage(Ingredients::errorString());
-            ingrs.clear();
-        }
-    }
-}
-
-void MainWindow::on_actionSaveRecipeAs_triggered() {
-    if (editor->_tmpIngredients.isEmpty())
-        statusBar()->showMessage(tr("Δεν υπάρχει ανοιχτή συνταγή για αποθήκευση"), 3000);
-    else {
-        ingrs.clear();
-        auto caloriesWidgets = editor->_tmpIngredients;
-        auto masses = calculator->findChildren<QLineEdit *>();
-        QList<int> kcalList;
-        QStringList labelData;
-        QStringList lineData;
-        for (auto &&widget : caloriesWidgets) {
-            labelData.append(widget.name());
-            kcalList.append(widget.calories());
-        }
-        for (auto &&mass : masses)
-            lineData.append(mass->text());
-        if (lineData.count()!=labelData.count())
-            return;
-    
-        for (int i = 0; i < labelData.count(); i++) {
-            QString ingr = labelData[i] + " > " + QString::number(kcalList[i]) + " > " + lineData[i];
-            ingrs.append(ingr);
-        }
-        ingrs.append("#\n" + calculator->instruct->toPlainText());
-        saveRecipeFile(ingrs);
-        editor->setModified(false);
-        calculator->setModified(false);
-        ingrs.clear();
-    }
-}
-
 void MainWindow::on_actionOpenRecipe_triggered() {
     if (editor->isModified() || calculator->isModified()) {
         const QMessageBox::StandardButton ret
@@ -690,6 +575,129 @@ void MainWindow::readSettings() {
     QApplication::setFont(font);
 }
 
+bool MainWindow::saveRecipeFile(QStringList ingrs) {
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Αποθήκευση"), writeableDir(),
+                                                    QString("Recipies (*.rcp);;Text files (*.txt);;All files (*.*)"));
+    if (fileName.isEmpty() || fileName == QFileDialog::Rejected)
+        return false;
+    QFileInfo fi(fileName);
+    if (fi.suffix().isEmpty())
+        fileName += ".rcp";
+    QSaveFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
+        qWarning() << tr("error opening %1").arg(fileName);
+        return false;
+    }
+    QTextStream data(&file);
+    data.setCodec(QTextCodec::codecForName("UTF-8"));
+    data.setGenerateByteOrderMark(true);
+    data.setIntegerBase(10);
+    for (auto &&ingredient : ingrs)
+        data << ingredient << '\n';
+    if (data.status() != QTextStream::Ok) {
+        qWarning() << tr("error saving %1").arg(fileName);
+        return false;
+    }
+    file.commit();
+    currentFile = fileName;
+    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
+                   fi.fileName(),
+                   fileName.startsWith(':') ? " [Preset]" : ""));
+    return true;
+}
+
+bool MainWindow::on_actionSaveRecipe_triggered() {
+    if (currentFile.isEmpty() || currentFile.startsWith(':')) {
+        if (!on_actionSaveRecipeAs_triggered())
+            return false;
+    }
+    else {
+        if (editor->isModified())
+            updateExtendedList();
+        Ingredients::ingredients = editor->_tmpIngredients;
+        QSaveFile file(currentFile);
+        if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
+            qWarning() << QObject::tr("Σφάλμα ανοίγματος αρχείου: %1").arg(file.errorString());
+            return false;
+        }
+        else {
+            ingrs.clear();
+            auto caloriesWidgets = editor->_tmpIngredients;
+            auto masses = calculator->findChildren<QLineEdit *>();
+            QList<int> kcalList;
+            QStringList labelData;
+            QStringList lineData;
+            for (auto &&widget : caloriesWidgets) {
+                labelData.append(widget.name());
+                kcalList.append(widget.calories());
+            }
+            for (auto &&mass : masses)
+                lineData.append(mass->text());
+            if (lineData.count()!=labelData.count())
+                return false;
+            for (int i=0; i<labelData.count(); i++) {
+                QString ingr = labelData[i] + " > " + QString::number(kcalList[i]) + " > " + lineData[i];
+                ingrs.append(ingr);
+            }
+            ingrs.append("#\n" + calculator->instruct->toPlainText());
+
+            QTextStream data(&file);
+            data.setCodec(QTextCodec::codecForName("UTF-8"));
+            data.setGenerateByteOrderMark(true);
+            data.setIntegerBase(10);
+            for (auto &&ingredient : ingrs)
+                data << ingredient << '\n';
+            if (data.status() != QTextStream::Ok) {
+                qWarning() << tr("error saving %1").arg(currentFile);
+                return false;
+            }
+            file.commit();
+            calculator->updateDisplay();
+            calculator->calculation();
+            editor->setModified(false);
+            calculator->setModified(false);
+            statusBar()->showMessage(Ingredients::errorString());
+            ingrs.clear();
+        }
+    }
+    return true;
+}
+
+bool MainWindow::on_actionSaveRecipeAs_triggered() {
+    if (editor->_tmpIngredients.isEmpty()) {
+        statusBar()->showMessage(tr("Δεν υπάρχει ανοιχτή συνταγή για αποθήκευση"), 3000);
+        return false;
+    }
+    else {
+        ingrs.clear();
+        auto caloriesWidgets = editor->_tmpIngredients;
+        auto masses = calculator->findChildren<QLineEdit *>();
+        QList<int> kcalList;
+        QStringList labelData;
+        QStringList lineData;
+        for (auto &&widget : caloriesWidgets) {
+            labelData.append(widget.name());
+            kcalList.append(widget.calories());
+        }
+        for (auto &&mass : masses)
+            lineData.append(mass->text());
+        if (lineData.count()!=labelData.count())
+            return false;
+        for (int i = 0; i < labelData.count(); i++) {
+            QString ingr = labelData[i] + " > " + QString::number(kcalList[i]) + " > " + lineData[i];
+            ingrs.append(ingr);
+        }
+        ingrs.append("#\n" + calculator->instruct->toPlainText());
+        if (saveRecipeFile(ingrs)) {
+            editor->setModified(false);
+            calculator->setModified(false);
+            ingrs.clear();
+            return true;
+        }
+    }
+    return false;
+}
+
 void MainWindow::closeEvent(QCloseEvent *event) {
     if (editor->isModified() || calculator->isModified()) {
         const QMessageBox::StandardButton ret
@@ -698,7 +706,12 @@ void MainWindow::closeEvent(QCloseEvent *event) {
                                    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         switch (ret) {
         case QMessageBox::Save:
-            on_actionSaveRecipe_triggered();
+            if (!on_actionSaveRecipe_triggered()) {
+                event->ignore();
+                return;
+            }
+            else
+                event->accept();
             break;
         case QMessageBox::Cancel:
             event->ignore();

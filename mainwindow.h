@@ -39,7 +39,7 @@ protected:
 
 private:
     void readSettings();
-    void saveRecipeFile(QStringList ingrs);
+    bool saveRecipeFile(QStringList ingrs);
     void selectFont();
     void setColumnNumber(int columns);
     void updateExtendedList();
@@ -54,6 +54,8 @@ private:
     QStringList recipeIngrs;
 
 private slots:
+    bool on_actionSaveRecipe_triggered();
+    bool on_actionSaveRecipeAs_triggered();
     void helpPopup();
     void infoPopup();
     void on_actionAdaptor_triggered();
@@ -62,8 +64,6 @@ private slots:
     void on_actionMoveUp_triggered();
     void on_actionMoveDown_triggered();
     void on_actionOpenRecipe_triggered();
-    void on_actionSaveRecipe_triggered();
-    void on_actionSaveRecipeAs_triggered();
     void on_actionToggleToolbar_toggled(bool arg1);
     void showCalculator();
     void showEditor();
