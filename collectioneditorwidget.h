@@ -4,6 +4,7 @@
 #include "collectionpage.h"
 #include "ingredient.h"
 #include "mainwindow.h"
+
 class QGridLayout;
 class QIntValidator;
 class IngredientWidget;

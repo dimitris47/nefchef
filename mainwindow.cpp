@@ -210,7 +210,10 @@ void MainWindow::showStart() {
     ui->actionAdaptor->setEnabled(false);
 }
 
-void MainWindow::showCalculator() { stackedWidget->setCurrentWidget(calculator); }
+void MainWindow::showCalculator() {
+    stackedWidget->setCurrentWidget(calculator);
+    ui->actionAdaptor->setEnabled(true);
+}
 
 void MainWindow::showEditor() {
     stackedWidget->setCurrentWidget(editor);
@@ -514,7 +517,10 @@ void MainWindow::on_actionAdaptor_triggered() {
     int ret = adaptor->exec();
     if (ret == QDialog::Rejected)
         return;
+
     auto lines = calculator->findChildren<QLineEdit *>();
+    QList<int> masses;
+
     for (auto &&line : lines) {
         if (line->text().isNull())
             line->setText("0");
@@ -525,10 +531,29 @@ void MainWindow::on_actionAdaptor_triggered() {
             }
             else {
                 int newMass = line->text().toInt() * adaptor->getFrac();
-                line->setText(QString::number(newMass));
+                if (newMass == 0) {
+                    const QMessageBox::StandardButton ret
+                        = QMessageBox::warning(nullptr, QApplication::applicationName(),
+                                               tr("Μετά τη μετατροπή θα υπάρξουν συστατικά με μηδενική δοσολογία.\n"),
+                                               QMessageBox::Cancel | QMessageBox::Ignore);
+                    switch (ret) {
+                    case QMessageBox::Cancel:
+                        return;
+                    case QMessageBox::Ignore:
+                        masses.append(0);
+                        break;
+                    default:
+                        return;
+                    }
+                }
+                else
+                    masses.append(newMass);
             }
         }
     }
+    for (int i = 0; i < masses.count(); i++)
+        lines.at(i)->setText(QString::number(masses.at(i)));
+    calculator->setModified(true);
 }
 
 void MainWindow::helpPopup() {
