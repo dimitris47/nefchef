@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "ingredient.h"
+#include "ingredientwidget.h"
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QSettings>
@@ -32,14 +33,15 @@ public slots:
     void startHelp();
     void startInfo();
     void startOpen();
+    void stateUpdates(int boxNum);
     void updateCalc();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
-    void readSettings();
     bool saveRecipeFile(QStringList ingrs);
+    void readSettings();
     void selectFont();
     void setColumnNumber(int columns);
     void updateExtendedList();

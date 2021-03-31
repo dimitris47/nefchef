@@ -19,9 +19,7 @@
 #include "ingredientwidget.h"
 #include "ui_ingredientwidget.h"
 
-IngredientWidget::IngredientWidget(QWidget *parent)
-    : IngredientWidget(Ingredient(), parent)
-{}
+IngredientWidget::IngredientWidget(QWidget *parent) : IngredientWidget(Ingredient(), parent) {}
 
 IngredientWidget::IngredientWidget(const Ingredient& ingr, QWidget *parent) :
     QFrame(parent),
@@ -32,6 +30,7 @@ IngredientWidget::IngredientWidget(const Ingredient& ingr, QWidget *parent) :
     ui->labelHeader->setVisible(false);
     ui->lineEditName->setText(_ingredient.name());
     ui->lineEditCalories->setText(QString::number(_ingredient.calories()));
+
     connect(ui->lineEditName,     &QLineEdit::textEdited, this, &IngredientWidget::setIngredientName);
     connect(ui->lineEditCalories, &QLineEdit::textEdited, this, &IngredientWidget::setIngredientCalories);
 }
@@ -42,27 +41,21 @@ void IngredientWidget::setCaloriesValidator(const QValidator *validator) {
     ui->lineEditCalories->setValidator(validator);
 }
 
-Ingredient IngredientWidget::ingredient() const {
-    return _ingredient;
-}
+Ingredient IngredientWidget::ingredient() const { return _ingredient; }
 
-void IngredientWidget::setIngredientName(const QString& name) {
+void IngredientWidget::setIngredientName(const QString &name) {
     _ingredient.setName(name);
     emit ingredientChanged(_ingredient);
 }
 
-void IngredientWidget::setIngredientCalories(const QString& calories) {
+void IngredientWidget::setIngredientCalories(const QString &calories) {
     _ingredient.setCalories(calories.toInt());
     emit ingredientChanged(_ingredient);
 }
 
-void IngredientWidget::setIngredient(const Ingredient &ingr) {
-    _ingredient = ingr;
-}
+void IngredientWidget::setIngredient(const Ingredient &ingr) { _ingredient = ingr; }
 
-bool IngredientWidget::isSelected() const {
-    return ui->checkBoxSelect->isChecked();
-}
+bool IngredientWidget::isSelected() const { return ui->checkBoxSelect->isChecked(); }
 
 void IngredientWidget::setFocus() {
     ui->lineEditName->setFocus();
@@ -75,4 +68,9 @@ void IngredientWidget::setHeaderVisible(bool visible) {
 void IngredientWidget::setText(const Ingredient &ingr) {
     ui->lineEditName->setText(ingr.name());
     ui->lineEditCalories->setText(QString::number(ingr.calories()));
+}
+
+void IngredientWidget::on_checkBoxSelect_stateChanged(int arg1) {
+    if (arg1 == 2)
+        emit stateChanged();
 }

@@ -28,6 +28,7 @@
 #include "startpage.h"
 #include <QActionGroup>
 #include <QApplication>
+#include <QCheckBox>
 #include <QFile>
 #include <QFileDialog>
 #include <QFont>
@@ -107,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(editor, &CollectionEditorWidget::itemClimbed,   this, &MainWindow::calcClimb);
     connect(editor, &CollectionEditorWidget::itemDescended, this, &MainWindow::calcDescend);
     connect(editor, &CollectionEditorWidget::itemRemoved,   this, &MainWindow::calcRemove);
+    connect(editor, &CollectionEditorWidget::stateChanged,  this, &MainWindow::stateUpdates);
     connect(start,  &StartPage::create,                     this, &MainWindow::startCreate);
     connect(start,  &StartPage::help,                       this, &MainWindow::startHelp);
     connect(start,  &StartPage::info,                       this, &MainWindow::startInfo);
@@ -120,6 +122,13 @@ MainWindow::~MainWindow() {
     delete editor;
     delete calculator;
     delete ui;
+}
+
+void MainWindow::stateUpdates(int boxNum) {
+    auto boxes = editor->findChildren<QCheckBox *>();
+    for (int i = 0; i < boxes.count(); i++)
+        if (i != boxNum)
+            boxes.at(i)->setCheckState(Qt::CheckState::Unchecked);
 }
 
 void MainWindow::calcRemove(QList<int> selections) {

@@ -58,7 +58,8 @@ void CollectionEditorWidget::updateDisplay() {
         if (row == 0)
             widget->setHeaderVisible(true);
         caloriesGridLayout->addWidget(widget, row, column * columns());
-        connect(widget, &IngredientWidget::ingredientChanged, this, [=](const Ingredient& ingr) {
+        connect(widget, &IngredientWidget::stateChanged, this, &CollectionEditorWidget::stateUpdates);
+        connect(widget, &IngredientWidget::ingredientChanged, this, [=](const Ingredient &ingr) {
             _tmpIngredients.replace(i, ingr);
             _modified = true;
         });
@@ -126,7 +127,7 @@ void CollectionEditorWidget::moveUp() {
     for (int i = 1; i < caloriesWidgets.count(); i++)
         if (caloriesWidgets.at(i)->isSelected())
             count++;
-    if (count>1) {
+    if (count > 1) {
         emit itemClimbed(-1);
         return;
     }
@@ -152,7 +153,7 @@ void CollectionEditorWidget::moveDown() {
     for (int i = 0; i < caloriesWidgets.count()-1; i++)
         if (caloriesWidgets.at(i)->isSelected())
             count++;
-    if (count>1) {
+    if (count > 1) {
         emit itemDescended(-1);
         return;
     }
@@ -170,4 +171,14 @@ void CollectionEditorWidget::moveDown() {
             auto boxes = findChildren<QCheckBox *>();
             boxes.at(i+boxes.count()/2+1)->setChecked(true);
         }
+}
+
+void CollectionEditorWidget::stateUpdates() {
+    IngredientWidget *w = qobject_cast<IngredientWidget *>(sender());
+    auto box = w->findChildren<QCheckBox *>();
+    auto theBox = box.at(0);
+    auto boxes = findChildren<QCheckBox *>();
+    for (int i = 0; i < boxes.count(); i++)
+        if (boxes.at(i) == theBox)
+            emit stateChanged(i);
 }

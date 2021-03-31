@@ -24,8 +24,10 @@ public:
 
 signals:
     void ingredientChanged(const Ingredient& ingr);
+    void stateChanged();
 
 private slots:
+    void on_checkBoxSelect_stateChanged(int arg1);
     void setText(const Ingredient& ingr);
     void setIngredientName(const QString &name);
     void setIngredientCalories(const QString &calories);

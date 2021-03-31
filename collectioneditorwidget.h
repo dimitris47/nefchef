@@ -28,12 +28,14 @@ signals:
     void itemClimbed(int i);
     void itemDescended(int i);
     void itemRemoved(QList<int> selections);
+    void stateChanged(int boxNum);
 
 public slots:
     void addIngredient();
     void moveDown();
     void moveUp();
     void removeSelected();
+    void stateUpdates();
 
 private:
     QGridLayout* caloriesGridLayout;
