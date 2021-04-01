@@ -20,7 +20,7 @@ public:
     void addNew(Ingredient);
     inline bool isModified() const { return _modified; }
     inline void setModified(bool modified) { _modified = modified; }
-    IngredientWidget* lastWidget() const { return _lastWidget; }
+    IngredientWidget *lastWidget() const { return _lastWidget; }
 
 signals:
     void editorChanged();
@@ -38,8 +38,8 @@ public slots:
     void stateUpdates();
 
 private:
-    QGridLayout* caloriesGridLayout;
-    QIntValidator* validator;
+    QGridLayout *caloriesGridLayout;
+    QIntValidator *validator;
     IngredientWidget* _lastWidget { nullptr };
     QString newName;
     bool _modified { false };

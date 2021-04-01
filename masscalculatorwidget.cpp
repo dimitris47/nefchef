@@ -59,7 +59,7 @@ void MassCalculatorWidget::calculation() {
     if (masssum)
         percentsum = kcalsum*100/masssum;
     ui->kcalcount->setText(QString::number(qRound(kcalsum)) + " kCal");
-    ui->masscount->setText(QString::number(masssum) + " g");
+    ui->masscount->setText(QString::number(masssum) + "g");
     ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
 }
 

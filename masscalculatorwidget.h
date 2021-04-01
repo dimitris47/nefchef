@@ -4,8 +4,8 @@
 #include "collectionpage.h"
 #include <QPlainTextEdit>
 #include <QWidget>
-class MassLineEdit;
 
+class MassLineEdit;
 namespace Ui { class MassCalculatorWidget; }
 
 class MassCalculatorWidget : public CollectionPage {

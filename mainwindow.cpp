@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionAddColumn,     &QAction::triggered, this,   [=]() {
         setColumnNumber(editor->columns() + 1);
     });
-    connect(ui->actionRemoveColumn,  &QAction::triggered, this, [=]() {
+    connect(ui->actionRemoveColumn,  &QAction::triggered, this,   [=]() {
         int cols = editor->columns();
         if (cols > 1)
             setColumnNumber(editor->columns() - 1);
@@ -458,7 +458,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     QTextDocument doc;
     QFileInfo fi(fileName);
 
-    QString stdText = "<p style='text-align: right'>Σύνολο: " + labelsList[1]->text() + "<br/>" + labelsList[5]->text() + "</p>" \
+    QString stdText = "<p style='text-align: right'>Σύνολο: " + labelsList[4]->text() + "<br/>" + labelsList[5]->text() + "</p>" \
                 + "<p style='text-align: center'><b><h2>" + fi.baseName() + "</b></h2></p>" \
                 + "<p style='line-height:120%'><br/><u>Υλικά:</u><br/>" + ingrList.join("<br/>") + "</p><br/>";
     QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>") + "</p>";

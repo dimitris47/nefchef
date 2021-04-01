@@ -1,9 +1,8 @@
-QT += core gui
-QT += printsupport
+QT += core gui printsupport
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = nefchef
 TEMPLATE = app
-VERSION = 1.7
+VERSION = 1.7.1
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \

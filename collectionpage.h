@@ -10,8 +10,7 @@ class CollectionPage : public QWidget {
     Q_OBJECT
     
 public:
-    explicit CollectionPage(QWidget* parent = nullptr)
-        :QWidget(parent) {}
+    explicit CollectionPage(QWidget *parent = nullptr) : QWidget(parent) {}
     virtual ~CollectionPage() {}
     int columnsHint() const {
         return qCeil(static_cast<float>(Ingredients::ingredients.size()) / 15);

@@ -32,7 +32,7 @@ Adaptor::~Adaptor() { delete ui; }
 void Adaptor::on_buttonBox_accepted() {
     den = ui->den->text().toDouble();
     num = ui->num->text().toDouble();
-    if (!den || den==0 || !num || num==0)
+    if (!den || den == 0 || !num || num == 0)
         return;
     else
         frac = ui->den->text().toDouble() / ui->num->text().toDouble();
