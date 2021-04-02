@@ -130,6 +130,7 @@
    <addaction name="separator"/>
    <addaction name="actionAddFromList"/>
    <addaction name="actionAddIngredient"/>
+   <addaction name="actionSelectMany"/>
    <addaction name="actionRemove"/>
    <addaction name="actionMoveUp"/>
    <addaction name="actionMoveDown"/>
@@ -424,6 +425,18 @@
    </property>
    <property name="toolTip">
     <string>Αφαίρεση επιλεγμένων συστατικών από τη συλλογή</string>
+   </property>
+  </action>
+  <action name="actionSelectMany">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="nefchef.qrc">
+     <normaloff>:/icons/accessories-dictionary.png</normaloff>:/icons/accessories-dictionary.png</iconset>
+   </property>
+   <property name="text">
+    <string>Επιλογή πολλαπλών στοιχείων</string>
    </property>
   </action>
  </widget>

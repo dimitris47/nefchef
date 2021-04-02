@@ -50,6 +50,7 @@ private:
     CollectionEditorWidget *editor;
     MassCalculatorWidget *calculator;
     QStackedWidget *stackedWidget;
+    bool selMany;
     QString currentFile;
     QStringList ingrs;
     QStringList instr;
@@ -66,6 +67,7 @@ private slots:
     void on_actionMoveUp_triggered();
     void on_actionMoveDown_triggered();
     void on_actionOpenRecipe_triggered();
+    void on_actionSelectMany_toggled(bool arg1);
     void on_actionToggleToolbar_toggled(bool arg1);
     void showCalculator();
     void showEditor();

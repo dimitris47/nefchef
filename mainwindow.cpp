@@ -120,6 +120,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(start,  &StartPage::open,                       this, &MainWindow::startOpen);
 
     showStart();
+    selMany = false;
 }
 
 MainWindow::~MainWindow() {
@@ -129,11 +130,20 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::on_actionSelectMany_toggled(bool arg1) {
+    if (arg1 == true)
+        selMany = true;
+    else
+        selMany = false;
+}
+
 void MainWindow::stateUpdates(int boxNum) {
-    auto boxes = editor->findChildren<QCheckBox *>();
-    for (int i = 0; i < boxes.count(); i++)
-        if (i != boxNum)
-            boxes.at(i)->setCheckState(Qt::CheckState::Unchecked);
+    if (!selMany) {
+        auto boxes = editor->findChildren<QCheckBox *>();
+        for (int i = 0; i < boxes.count(); i++)
+            if (i != boxNum)
+                boxes.at(i)->setCheckState(Qt::CheckState::Unchecked);
+    }
 }
 
 void MainWindow::calcRemove(QList<int> selections) {
