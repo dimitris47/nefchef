@@ -38,6 +38,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPrinter>
+#include <QPushButton>
 #include <QSaveFile>
 #include <QScreen>
 #include <QScrollArea>
@@ -66,6 +67,19 @@ MainWindow::MainWindow(QWidget *parent) :
     QScrollArea *scrollArea  = new QScrollArea();
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(stackedWidget);
+
+    bool bStatus = false;
+    QString bgValue = "ffede2ff";
+    uint bgHex = bgValue.toUInt(&bStatus, 16);
+    QPalette bgPlt = palette();
+    bgPlt.setColor(QPalette::Background, QColor(bgHex));
+    scrollArea->setAutoFillBackground(true);
+    scrollArea->setPalette(bgPlt);
+    ui->toolBar->setAutoFillBackground(true);
+    ui->toolBar->setPalette(bgPlt);
+    ui->menuBar->setAutoFillBackground(true);
+    ui->menuBar->setPalette(bgPlt);
+
     setCentralWidget(scrollArea);
 
     auto switchPages = new QActionGroup(this);
