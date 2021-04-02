@@ -40,6 +40,7 @@
 #include <QPrinter>
 #include <QSaveFile>
 #include <QScreen>
+#include <QScrollArea>
 #include <QScrollBar>
 #include <QStackedWidget>
 #include <QStandardPaths>
@@ -61,7 +62,11 @@ MainWindow::MainWindow(QWidget *parent) :
     stackedWidget->addWidget(start);
     stackedWidget->addWidget(calculator);
     stackedWidget->addWidget(editor);
-    setCentralWidget(stackedWidget);
+
+    QScrollArea *scrollArea  = new QScrollArea();
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(stackedWidget);
+    setCentralWidget(scrollArea);
 
     auto switchPages = new QActionGroup(this);
     switchPages->addAction(ui->actionStart);
