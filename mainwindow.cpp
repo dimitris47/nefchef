@@ -68,11 +68,12 @@ MainWindow::MainWindow(QWidget *parent) :
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(stackedWidget);
 
+    QPalette bgPlt = palette();
 //    bool bStatus = false;
 //    QString bgValue = "ffede2ff";
 //    uint bgHex = bgValue.toUInt(&bStatus, 16);
-    QPalette bgPlt = palette();
 //    bgPlt.setColor(QPalette::Background, QColor(bgHex));
+//    a custom color would be nicer but some HP screens don't render it
     bgPlt.setColor(QPalette::Background, QColor(Qt::darkCyan));
     scrollArea->setAutoFillBackground(true);
     scrollArea->setPalette(bgPlt);
@@ -488,7 +489,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
             if (widget.name().startsWith(label))
                 kcalList.append(widget.calories());
 
-    QString fileName = QFileDialog::getSaveFileName(nullptr, "Export PDF", writeableDir(), "*.pdf");
+    QString fileName = QFileDialog::getSaveFileName(nullptr, "Export PDF", writeableDir() + currentFile.remove(".rcp"), "*.pdf");
     if (fileName.isEmpty())
         return;
     if (QFileInfo(fileName).suffix().isEmpty())
