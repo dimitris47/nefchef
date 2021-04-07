@@ -29,6 +29,7 @@ public slots:
     void calcClimb(int i);
     void calcDescend(int i);
     void calcRemove(QList<int> selections);
+    void refreshCalc();
     void startCreate();
     void startHelp();
     void startInfo();

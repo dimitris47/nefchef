@@ -22,12 +22,17 @@ public:
     inline void setModified(bool modified) { _modified = modified; }
     QList<MassLineEdit *> lineEdits {};
 
+signals:
+    void refresh();
+
 public slots:
     void calculation();
+    void doRefresh(float kcalsum, int masssum, float percentsum);
 
 private slots:
     void clear();
-    
+    void on_refreshButton_clicked();
+
 private:
     Ui::MassCalculatorWidget *ui;
     bool _modified { false };

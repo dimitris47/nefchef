@@ -57,7 +57,7 @@ void MassCalculatorWidget::calculation() {
     }
     float percentsum {0};
     if (masssum)
-        percentsum = kcalsum*100/masssum;
+        percentsum = kcalsum * 100 / masssum;
     ui->kcalcount->setText(QString::number(qRound(kcalsum)) + " kCal");
     ui->masscount->setText(QString::number(masssum) + "g");
     ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
@@ -291,4 +291,15 @@ void MassCalculatorWidget::addIngr(QString name) {
     if (lineEdits.count() >= lastMasses.count())
         for (int i=0; i<lastMasses.count(); i++)
             lineEdits.at(i)->setText(lastMasses.at(i));
+}
+
+void MassCalculatorWidget::on_refreshButton_clicked() {
+    emit refresh();
+    _modified = true;
+}
+
+void MassCalculatorWidget::doRefresh(float kcalsum, int masssum, float percentsum) {
+    ui->kcalcount->setText(QString::number(qRound(kcalsum)) + " kCal");
+    ui->masscount->setText(QString::number(masssum) + "g");
+    ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
 }

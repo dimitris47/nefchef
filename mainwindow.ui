@@ -136,10 +136,10 @@
    <addaction name="actionMoveDown"/>
    <addaction name="actionAdaptor"/>
    <addaction name="separator"/>
-   <addaction name="separator"/>
    <addaction name="actionAddColumn"/>
    <addaction name="actionRemoveColumn"/>
    <addaction name="actionFont"/>
+   <addaction name="separator"/>
    <addaction name="actionHelp"/>
    <addaction name="actionInfo"/>
   </widget>

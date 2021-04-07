@@ -68,11 +68,12 @@ MainWindow::MainWindow(QWidget *parent) :
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(stackedWidget);
 
-    bool bStatus = false;
-    QString bgValue = "ffede2ff";
-    uint bgHex = bgValue.toUInt(&bStatus, 16);
+//    bool bStatus = false;
+//    QString bgValue = "ffede2ff";
+//    uint bgHex = bgValue.toUInt(&bStatus, 16);
     QPalette bgPlt = palette();
-    bgPlt.setColor(QPalette::Background, QColor(bgHex));
+//    bgPlt.setColor(QPalette::Background, QColor(bgHex));
+    bgPlt.setColor(QPalette::Background, QColor(Qt::darkCyan));
     scrollArea->setAutoFillBackground(true);
     scrollArea->setPalette(bgPlt);
     ui->toolBar->setAutoFillBackground(true);
@@ -122,6 +123,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionToggleToolbar->setChecked(true);
     readSettings();
 
+    connect(calculator, &MassCalculatorWidget::refresh, this, &MainWindow::refreshCalc);
     connect(editor, &CollectionEditorWidget::editorChanged, this, &MainWindow::updateCalc);
     connect(editor, &CollectionEditorWidget::itemAdded,     this, &MainWindow::addToCalc);
     connect(editor, &CollectionEditorWidget::itemClimbed,   this, &MainWindow::calcClimb);
@@ -142,6 +144,32 @@ MainWindow::~MainWindow() {
     delete editor;
     delete calculator;
     delete ui;
+}
+
+void MainWindow::refreshCalc() {
+    auto lines = editor->findChildren<QLineEdit *>();
+    QStringList calories;
+    QStringList masses;
+    for (int i = 1; i < lines.count(); i+=2)
+        calories.append(lines.at(i)->text());
+    for (auto &&line : calculator->findChildren<QLineEdit *>())
+        masses.append(line->text());
+
+    qDebug() << calories;
+    qDebug() << masses;
+
+    int masssum {0};
+    float kcalsum {0};
+    for (int j = 0; j < masses.count(); j++) {
+        masssum += masses.at(j).toInt();
+        kcalsum += calories.at(j).toInt() * masses.at(j).toInt() / 100.0;
+    }
+
+    float percentsum {0};
+    if (masssum)
+        percentsum = kcalsum * 100 / masssum;
+
+    calculator->doRefresh(kcalsum, masssum, percentsum);
 }
 
 void MainWindow::on_actionSelectMany_toggled(bool arg1) {
