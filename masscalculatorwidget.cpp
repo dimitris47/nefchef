@@ -298,8 +298,16 @@ void MassCalculatorWidget::on_refreshButton_clicked() {
     _modified = true;
 }
 
-void MassCalculatorWidget::doRefresh(float kcalsum, int masssum, float percentsum) {
+void MassCalculatorWidget::doRefresh(float kcalsum, int masssum, float percentsum, QStringList names) {
     ui->kcalcount->setText(QString::number(qRound(kcalsum)) + " kCal");
     ui->masscount->setText(QString::number(masssum) + "g");
     ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
+
+    auto calcLabels = findChildren<QLabel *>();
+    for (auto &&label : calcLabels)
+        qDebug() << label->text();
+    qDebug() << names;
+
+    for (int i = 0; i < names.count(); i++)
+        calcLabels.at(i + 6 + columns())->setText(names.at(i));
 }

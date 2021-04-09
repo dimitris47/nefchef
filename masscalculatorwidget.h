@@ -27,7 +27,7 @@ signals:
 
 public slots:
     void calculation();
-    void doRefresh(float kcalsum, int masssum, float percentsum);
+    void doRefresh(float kcalsum, int masssum, float percentsum, QStringList names);
 
 private slots:
     void clear();

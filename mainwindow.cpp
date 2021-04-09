@@ -152,15 +152,19 @@ MainWindow::~MainWindow() {
 
 void MainWindow::refreshCalc() {
     auto lines = editor->findChildren<QLineEdit *>();
+    auto widgets = editor->findChildren<IngredientWidget *>();
+
     QStringList calories;
     QStringList masses;
+    QStringList names;
+    QStringList updNames;
+
     for (int i = 1; i < lines.count(); i+=2)
         calories.append(lines.at(i)->text());
     for (auto &&line : calculator->findChildren<QLineEdit *>())
         masses.append(line->text());
-
-    qDebug() << calories;
-    qDebug() << masses;
+    for (auto &&widget : widgets)
+        names.append(widget->ingredient().name());
 
     int masssum {0};
     float kcalsum {0};
@@ -173,7 +177,7 @@ void MainWindow::refreshCalc() {
     if (masssum)
         percentsum = kcalsum * 100 / masssum;
 
-    calculator->doRefresh(kcalsum, masssum, percentsum);
+    calculator->doRefresh(kcalsum, masssum, percentsum, names);
 }
 
 void MainWindow::on_actionSelectMany_toggled(bool arg1) {
