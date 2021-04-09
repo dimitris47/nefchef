@@ -69,12 +69,15 @@ MainWindow::MainWindow(QWidget *parent) :
     scrollArea->setWidget(stackedWidget);
 
     QPalette bgPlt = palette();
-//    bool bStatus = false;
-//    QString bgValue = "ffede2ff";
-//    uint bgHex = bgValue.toUInt(&bStatus, 16);
-//    bgPlt.setColor(QPalette::Background, QColor(bgHex));
-//    a custom color would be nicer but some HP screens don't render it
-    bgPlt.setColor(QPalette::Background, QColor(Qt::darkCyan));
+    bool bStatus = false;
+    QString bgValue = "ffede2ff";
+    uint bgHex = bgValue.toUInt(&bStatus, 16);
+    bgPlt.setColor(QPalette::Background, QColor(bgHex));
+
+    /* the following ling to be used instead of the previous four lines
+     * in case a screen doesn't render custom colors (as it is with some HP laptop screens):
+        bgPlt.setColor(QPalette::Background, QColor(Qt::darkCyan)); */
+
     scrollArea->setAutoFillBackground(true);
     scrollArea->setPalette(bgPlt);
     ui->toolBar->setAutoFillBackground(true);
@@ -784,6 +787,7 @@ bool MainWindow::on_actionSaveRecipeAs_triggered() {
             editor->setModified(false);
             calculator->setModified(false);
             ingrs.clear();
+            on_actionSaveRecipe_triggered();
             return true;
         }
     }

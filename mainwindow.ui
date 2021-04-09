@@ -68,6 +68,7 @@
     <addaction name="actionAddFromList"/>
     <addaction name="actionAddIngredient"/>
     <addaction name="actionRemove"/>
+    <addaction name="actionSelectMany"/>
     <addaction name="actionAdaptor"/>
     <addaction name="separator"/>
     <addaction name="actionAddColumn"/>

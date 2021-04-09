@@ -93,3 +93,35 @@ void DropList::on_deselectButton_clicked() {
     auto item = ui->listWidget2->takeItem(ui->listWidget2->currentRow());
     delete item;
 }
+
+void DropList::on_removeButton_clicked() {
+    if (ui->listWidget->currentItem() == NULL)
+        return;
+    QDir dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (!dataDir.exists())
+        dataDir.mkpath(".");
+    QFile file(dataDir.path() + "/extended.cal");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    QTextStream reader(&file);
+    reader.setCodec(QTextCodec::codecForName("UTF-8"));
+    QStringList lines;
+    while (!reader.atEnd()) {
+        QString line = reader.readLine();
+        if (line != ui->listWidget->currentItem()->text())
+            lines.append(line);
+    }
+    file.close();
+    QFile newFile(dataDir.path() + "/extended.cal");
+    if (!newFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+    QTextStream writer(&newFile);
+    writer.setCodec(QTextCodec::codecForName("UTF-8"));
+    QString linesStr;
+    for (auto &&line : lines)
+        linesStr += line + "\n";
+    QByteArray ba = linesStr.toLocal8Bit();
+    const char *lineCharArray = ba.data();
+    newFile.write(lineCharArray);
+    ui->listWidget->takeItem(ui->listWidget->currentRow());
+}

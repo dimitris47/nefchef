@@ -78,6 +78,13 @@
      </property>
     </widget>
    </item>
+   <item row="6" column="0">
+    <widget class="QPushButton" name="removeButton">
+     <property name="text">
+      <string>Μόνιμη αφαίρεση από τη λίστα</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

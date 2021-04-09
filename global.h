@@ -4,7 +4,7 @@
 #include <QString>
 
 const QString APPNAME("NefChef");
-const QString VERSION("1.12");
+const QString VERSION("2.0");
 const QString CONTRIBUTORS("Dimitris Psathas, Asterios Dimitriou");
 
 #endif // GLOBAL_H
