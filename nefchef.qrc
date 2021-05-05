@@ -27,5 +27,6 @@
         <file>icons/go-down.png</file>
         <file>icons/go-up.png</file>
         <file>icons/volume.png</file>
+        <file>icons/org.gnome.Todo.png</file>
     </qresource>
 </RCC>

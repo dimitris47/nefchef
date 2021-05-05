@@ -434,7 +434,7 @@
    </property>
    <property name="icon">
     <iconset resource="nefchef.qrc">
-     <normaloff>:/icons/accessories-dictionary.png</normaloff>:/icons/accessories-dictionary.png</iconset>
+     <normaloff>:/icons/org.gnome.Todo.png</normaloff>:/icons/org.gnome.Todo.png</iconset>
    </property>
    <property name="text">
     <string>Επιλογή πολλαπλών στοιχείων</string>
