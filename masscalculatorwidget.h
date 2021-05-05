@@ -24,10 +24,12 @@ public:
 
 signals:
     void refresh();
+    void refreshMasses(QStringList lastMasses);
 
 public slots:
     void calculation();
     void doRefresh(float kcalsum, int masssum, float percentsum, QStringList names);
+    void doRefreshMasses(float kcalsum, int masssum, float percentsum, QStringList names, QStringList lastMasses);
 
 private slots:
     void clear();

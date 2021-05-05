@@ -127,17 +127,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionToggleToolbar->setChecked(true);
     readSettings();
 
-    connect(calculator, &MassCalculatorWidget::refresh, this, &MainWindow::refreshCalc);
-    connect(editor, &CollectionEditorWidget::editorChanged, this, &MainWindow::updateCalc);
-    connect(editor, &CollectionEditorWidget::itemAdded,     this, &MainWindow::addToCalc);
-    connect(editor, &CollectionEditorWidget::itemClimbed,   this, &MainWindow::calcClimb);
-    connect(editor, &CollectionEditorWidget::itemDescended, this, &MainWindow::calcDescend);
-    connect(editor, &CollectionEditorWidget::itemRemoved,   this, &MainWindow::calcRemove);
-    connect(editor, &CollectionEditorWidget::stateChanged,  this, &MainWindow::stateUpdates);
-    connect(start,  &StartPage::create,                     this, &MainWindow::startCreate);
-    connect(start,  &StartPage::help,                       this, &MainWindow::startHelp);
-    connect(start,  &StartPage::info,                       this, &MainWindow::startInfo);
-    connect(start,  &StartPage::open,                       this, &MainWindow::startOpen);
+    connect(calculator, &MassCalculatorWidget::refresh,         this, &MainWindow::refreshCalc);
+    connect(calculator, &MassCalculatorWidget::refreshMasses,   this, &MainWindow::refreshCalcMasses);
+    connect(editor,     &CollectionEditorWidget::editorChanged, this, &MainWindow::updateCalc);
+    connect(editor,     &CollectionEditorWidget::itemAdded,     this, &MainWindow::addToCalc);
+    connect(editor,     &CollectionEditorWidget::itemClimbed,   this, &MainWindow::calcClimb);
+    connect(editor,     &CollectionEditorWidget::itemDescended, this, &MainWindow::calcDescend);
+    connect(editor,     &CollectionEditorWidget::itemRemoved,   this, &MainWindow::calcRemove);
+    connect(editor,     &CollectionEditorWidget::stateChanged,  this, &MainWindow::stateUpdates);
+    connect(start,      &StartPage::create,                     this, &MainWindow::startCreate);
+    connect(start,      &StartPage::help,                       this, &MainWindow::startHelp);
+    connect(start,      &StartPage::info,                       this, &MainWindow::startInfo);
+    connect(start,      &StartPage::open,                       this, &MainWindow::startOpen);
 
     showStart();
     selMany = false;
@@ -178,6 +179,33 @@ void MainWindow::refreshCalc() {
         percentsum = kcalsum * 100 / masssum;
 
     calculator->doRefresh(kcalsum, masssum, percentsum, names);
+}
+
+void MainWindow::refreshCalcMasses(QStringList lastMasses) {
+    auto lines = editor->findChildren<QLineEdit *>();
+    auto widgets = editor->findChildren<IngredientWidget *>();
+
+    QStringList calories;
+    QStringList names;
+    QStringList updNames;
+
+    for (int i = 1; i < lines.count(); i+=2)
+        calories.append(lines.at(i)->text());
+    for (auto &&widget : widgets)
+        names.append(widget->ingredient().name());
+
+    int masssum {0};
+    float kcalsum {0};
+    for (int j = 0; j < lastMasses.count(); j++) {
+        masssum += lastMasses.at(j).toInt();
+        kcalsum += calories.at(j).toInt() * lastMasses.at(j).toInt() / 100.0;
+    }
+
+    float percentsum {0};
+    if (masssum)
+        percentsum = kcalsum * 100 / masssum;
+
+    calculator->doRefreshMasses(kcalsum, masssum, percentsum, names, lastMasses);
 }
 
 void MainWindow::on_actionSelectMany_toggled(bool arg1) {
@@ -287,6 +315,7 @@ void MainWindow::showStart() {
 void MainWindow::showCalculator() {
     stackedWidget->setCurrentWidget(calculator);
     ui->actionAdaptor->setEnabled(true);
+    updateCalc();
 }
 
 void MainWindow::showEditor() {

@@ -288,9 +288,11 @@ void MassCalculatorWidget::addIngr(QString name) {
 
     setUpdatesEnabled(true);
     clear();
-    if (lineEdits.count() >= lastMasses.count())
-        for (int i=0; i<lastMasses.count(); i++)
-            lineEdits.at(i)->setText(lastMasses.at(i));
+
+    QList<QLineEdit *> lineEdits = findChildren<QLineEdit *>();
+    qDebug() << lastMasses;
+
+    emit refreshMasses(lastMasses);
 }
 
 void MassCalculatorWidget::on_refreshButton_clicked() {
@@ -310,4 +312,22 @@ void MassCalculatorWidget::doRefresh(float kcalsum, int masssum, float percentsu
 
     for (int i = 0; i < names.count(); i++)
         calcLabels.at(i + 6 + columns())->setText(names.at(i));
+}
+
+void MassCalculatorWidget::doRefreshMasses(float kcalsum, int masssum, float percentsum, QStringList names, QStringList lastMasses) {
+    ui->kcalcount->setText(QString::number(qRound(kcalsum)) + " kCal");
+    ui->masscount->setText(QString::number(masssum) + "g");
+    ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
+
+    auto calcLabels = findChildren<QLabel *>();
+    for (auto &&label : calcLabels)
+        qDebug() << label->text();
+    qDebug() << names;
+
+    for (int i = 0; i < names.count(); i++)
+        calcLabels.at(i + 6 + columns())->setText(names.at(i));
+
+    if (lineEdits.count() >= lastMasses.count())
+        for (int i=0; i<lastMasses.count(); i++)
+            lineEdits.at(i)->setText(lastMasses.at(i));
 }

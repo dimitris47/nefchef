@@ -30,6 +30,7 @@ public slots:
     void calcDescend(int i);
     void calcRemove(QList<int> selections);
     void refreshCalc();
+    void refreshCalcMasses(QStringList lastMasses);
     void startCreate();
     void startHelp();
     void startInfo();
