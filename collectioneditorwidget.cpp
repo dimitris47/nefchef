@@ -31,14 +31,14 @@
 #include <algorithm>
 
 CollectionEditorWidget::CollectionEditorWidget(QWidget *parent) : CollectionPage(parent) {
-    validator = new QIntValidator(0, 100000, this);
+    validator = new QIntValidator(0, 99999, this);
     caloriesGridLayout = new QGridLayout(this);
     caloriesGridLayout->setObjectName(QString::fromUtf8("verticalLayout"));
     this->setLayout(caloriesGridLayout);
 }
 
 void CollectionEditorWidget::updateDisplay() {
-    setUpdatesEnabled(false); // to avoid screen flicker
+    setUpdatesEnabled(false);  // to avoid screen flicker
 
     auto caloriesWidgets = findChildren<IngredientWidget *>();
     for (auto &&widget : caloriesWidgets)

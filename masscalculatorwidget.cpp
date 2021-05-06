@@ -73,7 +73,7 @@ void MassCalculatorWidget::clear() {
 }
 
 void MassCalculatorWidget::updateDisplay() {
-    setUpdatesEnabled(false); // to avoid screen flicker
+    setUpdatesEnabled(false);  // to avoid screen flicker
 
     auto lastLines = findChildren<QLineEdit *>();
     QStringList lastMasses;
