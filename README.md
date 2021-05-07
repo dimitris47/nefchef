@@ -22,10 +22,12 @@ a. from source:
 You might need to install <code>libqt5gui5</code>, <code>g++</code> and <code>make</code> packages to your system before compiling.
 
 
-b. Debian systems:
+b. Debian & Debian-based systems:
 
-1. Download the latest <code>.deb</code> file from releases.
-2. Open downloads folder with Terminal and run:
-<code>sudo dpkg -i nefchef-$VERSION_NUMBER.deb</code>
+Download the latest <code>.deb</code> file from releases and run it with your package manager.
+
+c. RPM-based systems:
+
+Download the latest <code>.rmp</code> file and run it with your package manager.
 
 You might need to install the <code>libqt5gui5</code> package before running the <code>.deb</code> file.
