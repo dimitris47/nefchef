@@ -30,4 +30,4 @@ c. RPM-based systems:
 
 Download the latest <code>.rmp</code> file and run it with your package manager.
 
-You might need to install the <code>libqt5gui5</code> package before running the <code>.deb</code> file.
+You might need to have <code>libqt5gui5</code> installed before running the binary.
