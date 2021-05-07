@@ -28,6 +28,6 @@ Download the latest <code>.deb</code> file from releases and run it with your pa
 
 c. RPM-based systems:
 
-Download the latest <code>.rmp</code> file and run it with your package manager.
+Download the latest <code>.rpm</code> file and run it with your package manager.
 
 You might need to have <code>libqt5gui5</code> installed before running the binary.
