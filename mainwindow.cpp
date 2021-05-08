@@ -542,7 +542,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     }
 
     QStringList instrList;
-    for (auto &&line : calculator->instruct->toPlainText().split("\n")) {
+    for (auto &&line : calculator->instruct->toPlainText().replace("<", "&#60;").split("\n")) {
         if (line.isEmpty())
             instrList.append(line);
         else
@@ -555,7 +555,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     QString stdText = "<p style='text-align: right'>Σύνολο: " + labelsList[4]->text() + "<br/>" + labelsList[5]->text() + "</p>" \
                 + "<p style='text-align: center'><b><h2>" + fi.baseName() + "</b></h2></p>" \
                 + "<p style='line-height:120%'><br/><u>Υλικά:</u><br/>" + ingrList.join("<br/>") + "</p><br/>";
-    QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>").replace("<", "&#60;") + "</p>";
+    QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>") + "</p>";
     QString fullText = stdText + instrText;
 
     if (!calculator->instruct->toPlainText().isEmpty())
