@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
     uint bgHex = bgValue.toUInt(&bStatus, 16);
     bgPlt.setColor(QPalette::Background, QColor(bgHex));
 
-    /* the following ling to be used instead of the previous four lines
+    /* the following to be used instead of the previous four lines
      * in case a screen doesn't render custom colors (as it is with some HP laptop screens):
         bgPlt.setColor(QPalette::Background, QColor(Qt::darkCyan)); */
 
