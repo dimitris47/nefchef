@@ -1,33 +1,34 @@
-# NefChef
+# chores
 
-This is a cookbook creator with embedded calories calculator.
-As of this time, the menus and items are in Greek. Translators welcome!
+Chores is a very simple and also very lightweight to-do application.
 
 HOW TO INSTALL:
 
-- WINDOWS SYSTEMS:
+- WINDOWS:
 
-Run the latest <code>.exe</code> file.
-If after the installation the program doesn't start, install <code>vc_redist.exe</code> from the installation folder.
+Run the latest `.exe` file.
+If after the installation the program doesn't start, install `vc_redist.exe` from the installation folder.
 
+- MAC:
 
-- UNIX SYSTEMS:
+Download and open the latest `.dmg` image file.
+
+- LINUX:
 
 a. from source:
 
 1. Donwload the code or clone the repo
 2. Open extracted directory in terminal and run:
-   <code>qmake nefchef.pro CONFIG+=release && make && sudo make install && make clean</code>
+   `qmake nefchef.pro CONFIG+=release && make && sudo make install && make clean`
    
-You might need to install <code>libqt5gui5</code>, <code>g++</code> and <code>make</code> packages to your system before compiling.
-
+You might need to install `libqt5gui5`, `g++` and `make` packages to your system before compiling.
 
 b. Debian & Debian-based systems:
 
-Download the latest <code>.deb</code> file from releases and run it with your package manager.
+Download the latest `.deb` file from releases and run it with your package manager.
 
 c. RPM-based systems:
 
-Download the latest <code>.rpm</code> file and run it with your package manager.
+Download the latest `.rpm` file and run it with your package manager.
 
-You might need to have <code>libqt5gui5</code> installed before running the binary.
+You might need to have `libqt5gui5` installed before running the binary.
