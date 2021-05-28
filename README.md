@@ -11,7 +11,7 @@ If after the installation the program doesn't start, install `vc_redist.exe` fro
 
 - MAC:
 
-Download and open the latest `.dmg` image file.
+Download and copy the latest `.dmg` image file to the Applications directory.
 
 - LINUX:
 
