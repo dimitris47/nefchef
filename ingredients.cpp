@@ -94,9 +94,7 @@ bool saveData(const QString &fileName) {
     return file.commit();
 }
 
-QString errorString() {
-    return _errorString;
-}
+QString errorString() { return _errorString; }
 
 const QString preamble = QT_TR_NOOP("# Γραμμές που αρχίζουν με # είναι σχόλια\n"
                                     "# Οι άδειες γραμμές αγνοούνται\n"

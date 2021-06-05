@@ -288,10 +288,6 @@ void MassCalculatorWidget::addIngr(QString name) {
 
     setUpdatesEnabled(true);
     clear();
-
-    QList<QLineEdit *> lineEdits = findChildren<QLineEdit *>();
-    qDebug() << lastMasses;
-
     emit refreshMasses(lastMasses);
 }
 
@@ -306,10 +302,6 @@ void MassCalculatorWidget::doRefresh(float kcalsum, int masssum, float percentsu
     ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
 
     auto calcLabels = findChildren<QLabel *>();
-    for (auto &&label : calcLabels)
-        qDebug() << label->text();
-    qDebug() << names;
-
     for (int i = 0; i < names.count(); i++)
         calcLabels.at(i + 6 + columns())->setText(names.at(i));
 }
@@ -320,10 +312,6 @@ void MassCalculatorWidget::doRefreshMasses(float kcalsum, int masssum, float per
     ui->percentcount->setText(QString::number(qRound(percentsum)) + " kCal/100g");
 
     auto calcLabels = findChildren<QLabel *>();
-    for (auto &&label : calcLabels)
-        qDebug() << label->text();
-    qDebug() << names;
-
     for (int i = 0; i < names.count(); i++)
         calcLabels.at(i + 6 + columns())->setText(names.at(i));
 

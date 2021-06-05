@@ -22,6 +22,7 @@
 #include "collectioneditorwidget.h"
 #include "combo.h"
 #include "droplist.h"
+#include "global.h"
 #include "helpdialog.h"
 #include "ingredientwidget.h"
 #include "masscalculatorwidget.h"
@@ -208,12 +209,7 @@ void MainWindow::refreshCalcMasses(QStringList lastMasses) {
     calculator->doRefreshMasses(kcalsum, masssum, percentsum, names, lastMasses);
 }
 
-void MainWindow::on_actionSelectMany_toggled(bool arg1) {
-    if (arg1 == true)
-        selMany = true;
-    else
-        selMany = false;
-}
+void MainWindow::on_actionSelectMany_toggled(bool arg1) { selMany = arg1; }
 
 void MainWindow::stateUpdates(int boxNum) {
     if (!selMany) {
@@ -245,7 +241,7 @@ void MainWindow::addToCalc(QString name) {
 }
 
 void MainWindow::calcClimb(int i) {
-    if (i!=-1) {
+    if (i != -1) {
         QList<QLineEdit *> lines = calculator->findChildren<QLineEdit *>();
         QStringList masses;
         for (auto &&line : lines)
@@ -291,10 +287,7 @@ void MainWindow::startHelp() { helpPopup(); }
 void MainWindow::startInfo() { infoPopup(); }
 
 void MainWindow::on_actionToggleToolbar_toggled(bool arg1) {
-    if (arg1==true)
-        ui->toolBar->setVisible(true);
-    else
-        ui->toolBar->setVisible(false);
+    arg1 ? ui->toolBar->setVisible(true) : ui->toolBar->setVisible(false);
 }
 
 void MainWindow::setColumnNumber(int columns) {
@@ -543,10 +536,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
 
     QStringList instrList;
     for (auto &&line : calculator->instruct->toPlainText().replace("<", "&#60;").split("\n")) {
-        if (line.isEmpty())
-            instrList.append(line);
-        else
-            instrList.append("<span>&#8226; " + line + "</span>");
+        line.isEmpty() ? instrList.append(line) : instrList.append("<span>&#8226; " + line + "</span>");
     }
 
     QTextDocument doc;
@@ -558,10 +548,7 @@ void MainWindow::on_action_export_to_pdf_triggered() {
     QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>") + "</p>";
     QString fullText = stdText + instrText;
 
-    if (!calculator->instruct->toPlainText().isEmpty())
-        doc.setHtml(fullText);
-    else
-        doc.setHtml(stdText);
+    !calculator->instruct->toPlainText().isEmpty() ? doc.setHtml(fullText) : doc.setHtml(stdText);
     doc.print(&printer);
     ingrList.clear();
 }
@@ -678,14 +665,8 @@ void MainWindow::helpPopup() {
 
 void MainWindow::infoPopup() {
     QMessageBox::about(this, tr("Πληροφορίες προγράμματος"),
-                (QApplication::applicationName() + " " + QApplication::applicationVersion() + "<br/><br/>" +
-                tr("Program created by Dimitris Psathas<br/><br/>"
-                   "Special contributor: Asterios Dimitriou<br/><br/>"
-                   "Original idea by Nefeli Vroulli<br/><br/>"
-                   "Written in C++, built with the Qt5 toolkit<br/><br/>"
-                   "Published under the GNU General Public License v3.0<br/>"
-                   "Qt Libraries used under (L)GPLv3<br/><br/>"
-                   "&copy; 2020-2021 Dimitris Psathas")));
+                       (QApplication::applicationName() + " " + QApplication::applicationVersion() + "<br/><br/>" +
+                        APPINFO));
 }
 
 void MainWindow::readSettings() {

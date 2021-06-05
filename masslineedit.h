@@ -8,8 +8,7 @@ class MassLineEdit : public QLineEdit {
     Q_PROPERTY(int calories READ calories)
 
 public:
-    MassLineEdit(int calories, QWidget* parent = nullptr)
-    : QLineEdit(parent), _calories(calories) {}
+    MassLineEdit(int calories, QWidget* parent = nullptr) : QLineEdit(parent), _calories(calories) {}
     int calories() const { return _calories; }
 
 private:
