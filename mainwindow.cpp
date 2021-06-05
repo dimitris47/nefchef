@@ -287,7 +287,7 @@ void MainWindow::startHelp() { helpPopup(); }
 void MainWindow::startInfo() { infoPopup(); }
 
 void MainWindow::on_actionToggleToolbar_toggled(bool arg1) {
-    arg1 ? ui->toolBar->setVisible(true) : ui->toolBar->setVisible(false);
+    ui->toolBar->setVisible(arg1);
 }
 
 void MainWindow::setColumnNumber(int columns) {
