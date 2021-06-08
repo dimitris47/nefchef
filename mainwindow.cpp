@@ -627,8 +627,8 @@ void MainWindow::openRecipe(const QString &fileName) {
     calculator->updateDisplay();
 
     auto lines = calculator->findChildren<QLineEdit *>();
-    for (int i=0; i<masses.count(); i++)
-        lines[lines.count()-masses.count()+i]->setText(masses[i]);
+    for (int i = 0; i < masses.count(); i++)
+        lines[lines.count() - masses.count() + i]->setText(masses[i]);
     calculator->calculation();
 
     QFileInfo fi(fileName);
@@ -639,7 +639,7 @@ void MainWindow::openRecipe(const QString &fileName) {
 
     calculator->instruct->setPlainText(instr.join("\n"));
     calculator->instruct->verticalScrollBar()->setValue(0);
-    showCalculator();
+    stackedWidget->setCurrentWidget(calculator);
     ui->actionCalculator->setChecked(true);
     ui->actionStart->setChecked(false);
     editor->setModified(false);
