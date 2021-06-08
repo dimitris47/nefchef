@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
     uint bgHex = bgValue.toUInt(&bStatus, 16);
     bgPlt.setColor(QPalette::Background, QColor(bgHex));
 
-    /* the following to be used instead of the previous four lines
+    /* the following can be used instead of the previous four lines
      * in case a screen doesn't render custom colors (as it is with some HP laptop screens):
         bgPlt.setColor(QPalette::Background, QColor(Qt::darkCyan)); */
 
@@ -360,77 +360,6 @@ void MainWindow::on_actionAddFromList_triggered() {
     editor->setModified(true);
 }
 
-void MainWindow::openRecipe(const QString &fileName) {
-    QStringList masses;
-    editor->_tmpIngredients.clear();
-    Ingredients::ingredients.clear();
-    for (auto &&ingr : recipeIngrs) {
-        QStringList items = ingr.split(" > ");
-        QString name = items[0];
-        int calories = items[1].toInt();
-        QString mass = items[2];
-        Ingredient *newIngr = new Ingredient(name, calories);
-        editor->_tmpIngredients.append(*newIngr);
-        Ingredients::ingredients.append(*newIngr);
-        masses.append(mass);
-    }
-
-    auto caloriesWidgets = findChildren<IngredientWidget *>();
-    for (auto &&widget : caloriesWidgets)
-        widget->close();
-    editor->setColumns(1);
-    editor->updateDisplay();
-    calculator->setColumns(1);
-    calculator->updateDisplay();
-
-    auto lines = calculator->findChildren<QLineEdit *>();
-    for (int i=0; i<masses.count(); i++)
-        lines[lines.count()-masses.count()+i]->setText(masses[i]);
-    calculator->calculation();
-
-    QFileInfo fi(fileName);
-    currentFile = fileName;
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
-                   fi.fileName(),
-                   fileName.startsWith(':') ? " [Preset]" : ""));
-
-    calculator->instruct->setPlainText(instr.join("\n"));
-    calculator->instruct->verticalScrollBar()->setValue(0);
-    showCalculator();
-    ui->actionCalculator->setChecked(true);
-    ui->actionStart->setChecked(false);
-    editor->setModified(false);
-    calculator->setModified(false);
-}
-
-QString writeableDir() {
-    static QString dir;
-    if (!dir.isEmpty())
-        return dir;
-    QStringList locations = (QStringList()
-                             << QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)
-                             << QStandardPaths::standardLocations(QStandardPaths::HomeLocation));
-    for (auto &&loc : locations)
-        if (QFileInfo::exists(loc)) {
-            dir = loc;
-            return dir;
-        }
-    return QString();
-}
-
-bool MainWindow::saveFile(const QString &fileName) {
-    if (editor->isModified())
-        updateExtendedList();
-    Ingredients::ingredients = editor->_tmpIngredients;
-    bool ret = Ingredients::saveData(fileName);
-    if (ret) {
-        calculator->updateDisplay();
-        editor->setModified(false);
-    }
-    statusBar()->showMessage(Ingredients::errorString());
-    return ret;
-}
-
 void MainWindow::updateExtendedList() {
     QList<Ingredient> newIngr =  editor->_tmpIngredients - Ingredients::ingredients;
 
@@ -491,107 +420,6 @@ void MainWindow::updateExtendedList() {
     file.close();
 }
 
-void MainWindow::on_action_export_to_pdf_triggered() {
-    auto caloriesWidgets = editor->_tmpIngredients;
-    QList<int> kcalList;
-    QStringList labelData;
-    QStringList lineData;
-    auto labelsList = calculator->findChildren<QLabel *>();
-    auto linesList = calculator->findChildren<QLineEdit *>();
-    for (auto &&line : linesList)
-        if (!line->text().isEmpty()) {
-            lineData.append(line->text());
-            labelData.append(labelsList[linesList.indexOf(line)+editor->columns()+6]->text());
-        }
-    for (auto &&widget : caloriesWidgets)
-        for (auto &&label : labelData)
-            if (widget.name().startsWith(label))
-                kcalList.append(widget.calories());
-
-    QString fileName = QFileDialog::getSaveFileName(nullptr, "Export PDF", writeableDir() + currentFile.remove(".rcp"), "*.pdf");
-    if (fileName.isEmpty())
-        return;
-    if (QFileInfo(fileName).suffix().isEmpty())
-        fileName.append(".pdf");
-    QPrinter printer(QPrinter::PrinterResolution);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setPageSize(QPageSize(QPageSize::A4));
-    printer.setOutputFileName(fileName);
-
-    QStringList ingrList;
-    for (int i = 0; i < labelData.count(); i++) {
-        QString ingr = lineData[i] + " γρ. " + labelData[i];
-        ingrList.append("<span>&#8226; " + ingr + "</span>");
-    }
-
-    QStringList instrList;
-    for (auto &&line : calculator->instruct->toPlainText().replace("<", "&#60;").split("\n")) {
-        line.isEmpty() ? instrList.append(line) : instrList.append("<span>&#8226; " + line + "</span>");
-    }
-
-    QTextDocument doc;
-    QFileInfo fi(fileName);
-
-    QString stdText = "<p style='text-align: right'>Σύνολο: " + labelsList[4]->text() + "<br/>" + labelsList[5]->text() + "</p>" \
-                + "<p style='text-align: center'><b><h2>" + fi.baseName() + "</b></h2></p>" \
-                + "<p style='line-height:120%'><br/><u>Υλικά:</u><br/>" + ingrList.join("<br/>") + "</p><br/>";
-    QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>") + "</p>";
-    QString fullText = stdText + instrText;
-
-    !calculator->instruct->toPlainText().isEmpty() ? doc.setHtml(fullText) : doc.setHtml(stdText);
-    doc.print(&printer);
-    ingrList.clear();
-}
-
-void MainWindow::on_actionOpenRecipe_triggered() {
-    if (editor->isModified() || calculator->isModified()) {
-        const QMessageBox::StandardButton ret
-            = QMessageBox::warning(this, QApplication::applicationName(),
-                                   tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
-                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        switch (ret) {
-        case QMessageBox::Save:
-            on_actionSaveRecipe_triggered();
-            break;
-        case QMessageBox::Cancel:
-            return;
-        default:
-            break;
-        }
-    }
-    instr.clear();
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Άνοιγμα αρχείου"), writeableDir(),
-                                                    QString("Recipies (*.rcp);;Text files (*.txt);;All files (*.*)"));
-    if (fileName.isEmpty())
-        return;
-    QFileInfo fi(fileName);
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
-                   fi.fileName(),
-                   fileName.startsWith(':') ? " [Preset]" : ""));
-
-    QFile data(fileName);
-    if (!data.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << tr("error opening %1").arg(fileName);
-        return;
-    }
-    QTextStream reader(&data);
-    reader.setCodec(QTextCodec::codecForName("UTF-8"));
-    while (!reader.atEnd()) {
-        QString line = reader.readLine();
-        if (line.startsWith("#"))
-            break;
-        recipeIngrs.append(line);
-    }
-    while (!reader.atEnd()) {
-        QString line = reader.readLine();
-        if (!recipeIngrs.contains(line))
-            instr.append(line);
-    }
-    openRecipe(fileName);
-    currentFile = fileName;
-    recipeIngrs.clear();
-}
-
 void MainWindow::on_actionAdaptor_triggered() {
     Adaptor *adaptor = new Adaptor;
     int ret = adaptor->exec();
@@ -615,7 +443,7 @@ void MainWindow::on_actionAdaptor_triggered() {
                     const QMessageBox::StandardButton ret
                         = QMessageBox::warning(nullptr, QApplication::applicationName(),
                                                tr("Μετά τη μετατροπή θα υπάρξουν συστατικά με μηδενική δοσολογία.\n"),
-                                               QMessageBox::Cancel | QMessageBox::Ignore);
+                                                  QMessageBox::Cancel | QMessageBox::Ignore);
                     switch (ret) {
                     case QMessageBox::Cancel:
                         return;
@@ -636,42 +464,19 @@ void MainWindow::on_actionAdaptor_triggered() {
     calculator->setModified(true);
 }
 
-void MainWindow::helpPopup() {
-    QFile file(":/instructions.txt");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    QTextStream in(&file);
-    in.setCodec(QTextCodec::codecForName("UTF-8"));
-    QString text = in.readAll();
-    file.close();
-
-    auto screen = qApp->screens().first();
-    QSize s = screen->availableSize();
-    HelpDialog dialog;
-    dialog.setText(text);
-    dialog.resize(s.width()*0.5, s.height()*0.5);
-    dialog.exec();
-}
-
-void MainWindow::infoPopup() {
-    QMessageBox::about(this, tr("Πληροφορίες προγράμματος"),
-                       (QApplication::applicationName() + " " + QApplication::applicationVersion() + "<br/><br/>" +
-                        APPINFO));
-}
-
-void MainWindow::readSettings() {
-    QSettings settings;
-    bool isMax = settings.value("isMaximized", false).toBool();
-    if (isMax)
-        showMaximized();
-    else {
-        const QByteArray geometry = settings.value("geometry", QByteArray()).toByteArray();
-        restoreGeometry(geometry);
-    }
-    const QString f = settings.value("font", QFont()).toString();
-    const int s = settings.value("size", 11).toInt();
-    const QFont font(f, s);
-    QApplication::setFont(font);
+QString writeableDir() {
+    static QString dir;
+    if (!dir.isEmpty())
+        return dir;
+    QStringList locations = (QStringList()
+                             << QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)
+                             << QStandardPaths::standardLocations(QStandardPaths::HomeLocation));
+    for (auto &&loc : locations)
+        if (QFileInfo::exists(loc)) {
+            dir = loc;
+            return dir;
+        }
+    return QString();
 }
 
 bool MainWindow::saveRecipeFile(QStringList ingrs) {
@@ -755,7 +560,7 @@ bool MainWindow::on_actionSaveRecipe_triggered() {
             calculator->calculation();
             editor->setModified(false);
             calculator->setModified(false);
-            statusBar()->showMessage(Ingredients::errorString());
+            statusBar()->showMessage(Ingredients::errorString(), 5000);
             ingrs.clear();
         }
     }
@@ -796,6 +601,188 @@ bool MainWindow::on_actionSaveRecipeAs_triggered() {
         }
     }
     return false;
+}
+
+void MainWindow::openRecipe(const QString &fileName) {
+    QStringList masses;
+    editor->_tmpIngredients.clear();
+    Ingredients::ingredients.clear();
+    for (auto &&ingr : recipeIngrs) {
+        QStringList items = ingr.split(" > ");
+        QString name = items[0];
+        int calories = items[1].toInt();
+        QString mass = items[2];
+        Ingredient *newIngr = new Ingredient(name, calories);
+        editor->_tmpIngredients.append(*newIngr);
+        Ingredients::ingredients.append(*newIngr);
+        masses.append(mass);
+    }
+
+    auto caloriesWidgets = findChildren<IngredientWidget *>();
+    for (auto &&widget : caloriesWidgets)
+        widget->close();
+    editor->setColumns(1);
+    editor->updateDisplay();
+    calculator->setColumns(1);
+    calculator->updateDisplay();
+
+    auto lines = calculator->findChildren<QLineEdit *>();
+    for (int i=0; i<masses.count(); i++)
+        lines[lines.count()-masses.count()+i]->setText(masses[i]);
+    calculator->calculation();
+
+    QFileInfo fi(fileName);
+    currentFile = fileName;
+    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
+                   fi.fileName(),
+                   fileName.startsWith(':') ? " [Preset]" : ""));
+
+    calculator->instruct->setPlainText(instr.join("\n"));
+    calculator->instruct->verticalScrollBar()->setValue(0);
+    showCalculator();
+    ui->actionCalculator->setChecked(true);
+    ui->actionStart->setChecked(false);
+    editor->setModified(false);
+    calculator->setModified(false);
+}
+
+void MainWindow::on_actionOpenRecipe_triggered() {
+    if (editor->isModified() || calculator->isModified()) {
+        const QMessageBox::StandardButton ret
+            = QMessageBox::warning(this, QApplication::applicationName(),
+                                   tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
+                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        switch (ret) {
+        case QMessageBox::Save:
+            on_actionSaveRecipe_triggered();
+            break;
+        case QMessageBox::Cancel:
+            return;
+        default:
+            break;
+        }
+    }
+    instr.clear();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Άνοιγμα αρχείου"), writeableDir(),
+                                                    QString("Recipies (*.rcp);;Text files (*.txt);;All files (*.*)"));
+    if (fileName.isEmpty())
+        return;
+    QFileInfo fi(fileName);
+    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
+                   fi.fileName(),
+                   fileName.startsWith(':') ? " [Preset]" : ""));
+
+    QFile data(fileName);
+    if (!data.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << tr("error opening %1").arg(fileName);
+        return;
+    }
+    QTextStream reader(&data);
+    reader.setCodec(QTextCodec::codecForName("UTF-8"));
+    while (!reader.atEnd()) {
+        QString line = reader.readLine();
+        if (line.startsWith("#"))
+            break;
+        recipeIngrs.append(line);
+    }
+    while (!reader.atEnd()) {
+        QString line = reader.readLine();
+        if (!recipeIngrs.contains(line))
+            instr.append(line);
+    }
+    openRecipe(fileName);
+    currentFile = fileName;
+    recipeIngrs.clear();
+}
+
+void MainWindow::on_action_export_to_pdf_triggered() {
+    auto caloriesWidgets = editor->_tmpIngredients;
+    QList<int> kcalList;
+    QStringList labelData;
+    QStringList lineData;
+    auto labelsList = calculator->findChildren<QLabel *>();
+    auto linesList = calculator->findChildren<QLineEdit *>();
+    for (auto &&line : linesList)
+        if (!line->text().isEmpty()) {
+            lineData.append(line->text());
+            labelData.append(labelsList[linesList.indexOf(line)+editor->columns()+6]->text());
+        }
+    for (auto &&widget : caloriesWidgets)
+        for (auto &&label : labelData)
+            if (widget.name().startsWith(label))
+                kcalList.append(widget.calories());
+
+    QString fileName = QFileDialog::getSaveFileName(nullptr, "Export PDF", writeableDir() + currentFile.remove(".rcp"), "*.pdf");
+    if (fileName.isEmpty())
+        return;
+    if (QFileInfo(fileName).suffix().isEmpty())
+        fileName.append(".pdf");
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setOutputFileName(fileName);
+
+    QStringList ingrList;
+    for (int i = 0; i < labelData.count(); i++) {
+        QString ingr = lineData[i] + " γρ. " + labelData[i];
+        ingrList.append("<span>&#8226; " + ingr + "</span>");
+    }
+
+    QStringList instrList;
+    for (auto &&line : calculator->instruct->toPlainText().replace("<", "&#60;").split("\n")) {
+        line.isEmpty() ? instrList.append(line) : instrList.append("<span>&#8226; " + line + "</span>");
+    }
+
+    QTextDocument doc;
+    QFileInfo fi(fileName);
+
+    QString stdText = "<p style='text-align: right'>Σύνολο: " + labelsList[4]->text() + "<br/>" + labelsList[5]->text() + "</p>" \
+                + "<p style='text-align: center'><b><h2>" + fi.baseName() + "</b></h2></p>" \
+                + "<p style='line-height:120%'><br/><u>Υλικά:</u><br/>" + ingrList.join("<br/>") + "</p><br/>";
+    QString instrText = "<p style='line-height:120%'><u>Οδηγίες εκτέλεσης:</u><br/>" + instrList.join("<br/>") + "</p>";
+    QString fullText = stdText + instrText;
+
+    !calculator->instruct->toPlainText().isEmpty() ? doc.setHtml(fullText) : doc.setHtml(stdText);
+    doc.print(&printer);
+    ingrList.clear();
+}
+
+void MainWindow::helpPopup() {
+    QFile file(":/instructions.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    QTextStream in(&file);
+    in.setCodec(QTextCodec::codecForName("UTF-8"));
+    QString text = in.readAll();
+    file.close();
+
+    auto screen = qApp->screens().first();
+    QSize s = screen->availableSize();
+    HelpDialog dialog;
+    dialog.setText(text);
+    dialog.resize(s.width()*0.5, s.height()*0.5);
+    dialog.exec();
+}
+
+void MainWindow::infoPopup() {
+    QMessageBox::about(this, tr("Πληροφορίες προγράμματος"),
+                       (QApplication::applicationName() + " " + QApplication::applicationVersion() + "<br/><br/>" +
+                        APPINFO));
+}
+
+void MainWindow::readSettings() {
+    QSettings settings;
+    bool isMax = settings.value("isMaximized", false).toBool();
+    if (isMax)
+        showMaximized();
+    else {
+        const QByteArray geometry = settings.value("geometry", QByteArray()).toByteArray();
+        restoreGeometry(geometry);
+    }
+    const QString f = settings.value("font", QFont()).toString();
+    const int s = settings.value("size", 11).toInt();
+    const QFont font(f, s);
+    QApplication::setFont(font);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

@@ -20,9 +20,7 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void loadFile(const QString &fileName);
     void openRecipe(const QString &fileName);
-    bool saveFile(const QString &fileName);
 
 public slots:
     void addToCalc(QString name);
