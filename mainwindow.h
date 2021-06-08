@@ -31,12 +31,7 @@ public slots:
     void calcRemove(QList<int> selections);
     void refreshCalc();
     void refreshCalcMasses(QStringList lastMasses);
-    void startCreate();
-    void startHelp();
-    void startInfo();
-    void startOpen();
     void stateUpdates(int boxNum);
-    void updateCalc();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -66,8 +61,6 @@ private slots:
     void on_actionAdaptor_triggered();
     void on_actionAddFromList_triggered();
     void on_action_export_to_pdf_triggered();
-    void on_actionMoveUp_triggered();
-    void on_actionMoveDown_triggered();
     void on_actionOpenRecipe_triggered();
     void on_actionSelectMany_toggled(bool arg1);
     void on_actionToggleToolbar_toggled(bool arg1);

@@ -124,22 +124,24 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionInfo,       &QAction::triggered, this, &MainWindow::infoPopup);
     connect(ui->actionExit,       &QAction::triggered, this, &MainWindow::close);
     connect(ui->actionFont,       &QAction::triggered, this, &MainWindow::selectFont);
+    connect(ui->actionMoveUp,     &QAction::triggered, this, [this]() { editor->moveUp(); });
+    connect(ui->actionMoveDown,   &QAction::triggered, this, [this]() { editor->moveDown(); });
 
     ui->actionToggleToolbar->setChecked(true);
     readSettings();
 
     connect(calculator, &MassCalculatorWidget::refresh,         this, &MainWindow::refreshCalc);
     connect(calculator, &MassCalculatorWidget::refreshMasses,   this, &MainWindow::refreshCalcMasses);
-    connect(editor,     &CollectionEditorWidget::editorChanged, this, &MainWindow::updateCalc);
+    connect(editor,     &CollectionEditorWidget::editorChanged, this, [this]() { calculator->updateDisplay(); });
     connect(editor,     &CollectionEditorWidget::itemAdded,     this, &MainWindow::addToCalc);
     connect(editor,     &CollectionEditorWidget::itemClimbed,   this, &MainWindow::calcClimb);
     connect(editor,     &CollectionEditorWidget::itemDescended, this, &MainWindow::calcDescend);
     connect(editor,     &CollectionEditorWidget::itemRemoved,   this, &MainWindow::calcRemove);
     connect(editor,     &CollectionEditorWidget::stateChanged,  this, &MainWindow::stateUpdates);
-    connect(start,      &StartPage::create,                     this, &MainWindow::startCreate);
-    connect(start,      &StartPage::help,                       this, &MainWindow::startHelp);
-    connect(start,      &StartPage::info,                       this, &MainWindow::startInfo);
-    connect(start,      &StartPage::open,                       this, &MainWindow::startOpen);
+    connect(start,      &StartPage::create,                     this, [this]() { showDropList(); });
+    connect(start,      &StartPage::help,                       this, [this]() { helpPopup(); });
+    connect(start,      &StartPage::info,                       this, [this]() { infoPopup(); });
+    connect(start,      &StartPage::open,                       this, &MainWindow::on_actionOpenRecipe_triggered);
 
     showStart();
     selMany = false;
@@ -209,7 +211,9 @@ void MainWindow::refreshCalcMasses(QStringList lastMasses) {
     calculator->doRefreshMasses(kcalsum, masssum, percentsum, names, lastMasses);
 }
 
-void MainWindow::on_actionSelectMany_toggled(bool arg1) { selMany = arg1; }
+void MainWindow::on_actionSelectMany_toggled(bool arg1) {
+    selMany = arg1;
+}
 
 void MainWindow::stateUpdates(int boxNum) {
     if (!selMany) {
@@ -276,16 +280,6 @@ void MainWindow::calcDescend(int i) {
         statusBar()->showMessage(tr("Δεν είναι δυνατή η ταυτόχρονη μετακίνηση πολλαπλών στοιχείων"));
 }
 
-void MainWindow::updateCalc() { calculator->updateDisplay(); }
-
-void MainWindow::startOpen() { on_actionOpenRecipe_triggered(); }
-
-void MainWindow::startCreate() { showDropList(); }
-
-void MainWindow::startHelp() { helpPopup(); }
-
-void MainWindow::startInfo() { infoPopup(); }
-
 void MainWindow::on_actionToggleToolbar_toggled(bool arg1) {
     ui->toolBar->setVisible(arg1);
 }
@@ -308,7 +302,7 @@ void MainWindow::showStart() {
 void MainWindow::showCalculator() {
     stackedWidget->setCurrentWidget(calculator);
     ui->actionAdaptor->setEnabled(true);
-    updateCalc();
+    calculator->updateDisplay();
 }
 
 void MainWindow::showEditor() {
@@ -496,10 +490,6 @@ void MainWindow::updateExtendedList() {
             data << ingredient.name() << " = " << ingredient.calories() << '\n';
     file.close();
 }
-
-void MainWindow::on_actionMoveUp_triggered() { editor->moveUp(); }
-
-void MainWindow::on_actionMoveDown_triggered() { editor->moveDown(); }
 
 void MainWindow::on_action_export_to_pdf_triggered() {
     auto caloriesWidgets = editor->_tmpIngredients;
