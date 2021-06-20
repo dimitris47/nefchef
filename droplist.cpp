@@ -58,7 +58,7 @@ DropList::~DropList() { delete ui; }
 
 QStringList DropList::selectedItems() const {
     QStringList selected;
-    for (int row=0; row< ui->listWidget2->count(); row++ )
+    for (int row = 0; row < ui->listWidget2->count(); row++ )
         selected << ui->listWidget2->item(row)->text();
     return selected;
 }

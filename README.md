@@ -1,4 +1,4 @@
-# chores
+# NefChef
 
 Chores is a very simple and also very lightweight to-do application.
 

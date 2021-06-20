@@ -268,23 +268,19 @@ void MassCalculatorWidget::addIngr(QString name) {
         ui->caloriesGridLayout->addWidget(line, row, 1 + column * columns(), 1, 1, Qt::AlignHCenter);
         lineEdits.append(line);
         connect(line, &MassLineEdit::textEdited, this, &MassCalculatorWidget::calculation);
-        connect(line, &MassLineEdit::textEdited, this, [=]() {
-            _modified = true;
-        });
+        connect(line, &MassLineEdit::textEdited, this, [=]() { _modified = true; });
     }
 
     QList<QLabel* > labelList = findChildren<QLabel *>();
     labelList.at(labelList.count()-1)->setText(name);
 
-    ui->caloriesGridLayout->addWidget(instruct, 0, columns()*2+3, rowsPerColumn + 1, 1);
+    ui->caloriesGridLayout->addWidget(instruct, 0, columns() * 2 + 3, rowsPerColumn + 1, 1);
     instruct->setAttribute(Qt::WA_DeleteOnClose);
     instruct->setPlaceholderText("Οδηγίες εκτέλεσης της συνταγής "
                                  "(στην εξαγωγή σε PDF εισάγονται αυτόματα bullet points σε κάθε χειροκίνητη αλλαγή σειράς)");
     if (columns())
         instruct->setVisible(true);
-    connect(instruct, &QPlainTextEdit::textChanged, this, [=]() {
-        _modified = true;
-    });
+    connect(instruct, &QPlainTextEdit::textChanged, this, [=]() { _modified = true; });
 
     setUpdatesEnabled(true);
     clear();

@@ -532,7 +532,7 @@ bool MainWindow::on_actionSaveRecipe_triggered() {
             QStringList labelData;
             QStringList lineData;
             for (auto &&widget : caloriesWidgets) {
-                labelData.append(widget.name());
+                labelData.append(widget.name().replace('=', ':').replace('>', ':'));
                 kcalList.append(widget.calories());
             }
             for (auto &&mass : masses)
@@ -580,7 +580,7 @@ bool MainWindow::on_actionSaveRecipeAs_triggered() {
         QStringList labelData;
         QStringList lineData;
         for (auto &&widget : caloriesWidgets) {
-            labelData.append(widget.name());
+            labelData.append(widget.name().replace('=', ':').replace('>', ':'));
             kcalList.append(widget.calories());
         }
         for (auto &&mass : masses)
