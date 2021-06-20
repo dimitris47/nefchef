@@ -603,6 +603,53 @@ bool MainWindow::on_actionSaveRecipeAs_triggered() {
     return false;
 }
 
+void MainWindow::on_actionOpenRecipe_triggered() {
+    if (editor->isModified() || calculator->isModified()) {
+        const QMessageBox::StandardButton ret
+            = QMessageBox::warning(this, QApplication::applicationName(),
+                                   tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
+                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        switch (ret) {
+        case QMessageBox::Save:
+            on_actionSaveRecipe_triggered();
+            break;
+        case QMessageBox::Cancel:
+            return;
+        default:
+            break;
+        }
+    }
+    instr.clear();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Άνοιγμα αρχείου"), writeableDir(),
+                                                    QString("Recipies (*.rcp);;Text files (*.txt);;All files (*.*)"));
+    if (fileName.isEmpty())
+        return;
+    QFileInfo fi(fileName);
+    setWindowTitle(QString("%1 - %2").arg(QApplication::applicationName(), fi.fileName()));
+
+    QFile data(fileName);
+    if (!data.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << tr("error opening %1").arg(fileName);
+        return;
+    }
+    QTextStream reader(&data);
+    reader.setCodec(QTextCodec::codecForName("UTF-8"));
+    while (!reader.atEnd()) {
+        QString line = reader.readLine();
+        if (line.startsWith("#"))
+            break;
+        recipeIngrs.append(line);
+    }
+    while (!reader.atEnd()) {
+        QString line = reader.readLine();
+        if (!recipeIngrs.contains(line))
+            instr.append(line);
+    }
+    openRecipe(fileName);
+    currentFile = fileName;
+    recipeIngrs.clear();
+}
+
 void MainWindow::openRecipe(const QString &fileName) {
     QStringList masses;
     editor->_tmpIngredients.clear();
@@ -633,9 +680,7 @@ void MainWindow::openRecipe(const QString &fileName) {
 
     QFileInfo fi(fileName);
     currentFile = fileName;
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
-                   fi.fileName(),
-                   fileName.startsWith(':') ? " [Preset]" : ""));
+    setWindowTitle(QString("%1 - %2").arg(QApplication::applicationName(), fi.fileName()));
 
     calculator->instruct->setPlainText(instr.join("\n"));
     calculator->instruct->verticalScrollBar()->setValue(0);
@@ -644,55 +689,6 @@ void MainWindow::openRecipe(const QString &fileName) {
     ui->actionStart->setChecked(false);
     editor->setModified(false);
     calculator->setModified(false);
-}
-
-void MainWindow::on_actionOpenRecipe_triggered() {
-    if (editor->isModified() || calculator->isModified()) {
-        const QMessageBox::StandardButton ret
-            = QMessageBox::warning(this, QApplication::applicationName(),
-                                   tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
-                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        switch (ret) {
-        case QMessageBox::Save:
-            on_actionSaveRecipe_triggered();
-            break;
-        case QMessageBox::Cancel:
-            return;
-        default:
-            break;
-        }
-    }
-    instr.clear();
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Άνοιγμα αρχείου"), writeableDir(),
-                                                    QString("Recipies (*.rcp);;Text files (*.txt);;All files (*.*)"));
-    if (fileName.isEmpty())
-        return;
-    QFileInfo fi(fileName);
-    setWindowTitle(QString("%1 - %2%3").arg(QApplication::applicationName(),
-                   fi.fileName(),
-                   fileName.startsWith(':') ? " [Preset]" : ""));
-
-    QFile data(fileName);
-    if (!data.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << tr("error opening %1").arg(fileName);
-        return;
-    }
-    QTextStream reader(&data);
-    reader.setCodec(QTextCodec::codecForName("UTF-8"));
-    while (!reader.atEnd()) {
-        QString line = reader.readLine();
-        if (line.startsWith("#"))
-            break;
-        recipeIngrs.append(line);
-    }
-    while (!reader.atEnd()) {
-        QString line = reader.readLine();
-        if (!recipeIngrs.contains(line))
-            instr.append(line);
-    }
-    openRecipe(fileName);
-    currentFile = fileName;
-    recipeIngrs.clear();
 }
 
 void MainWindow::on_action_export_to_pdf_triggered() {

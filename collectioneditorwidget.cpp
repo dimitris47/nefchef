@@ -70,21 +70,9 @@ void CollectionEditorWidget::updateDisplay() {
 }
 
 void CollectionEditorWidget::addIngredient() {
-    auto ingr = Ingredient();
-    _tmpIngredients.append(ingr);
-    updateDisplay();
-    Ingredients::ingredients = _tmpIngredients;
-    _modified = true;
-    auto lines = findChildren<QLineEdit *>();
-    connect(lines.at(lines.count()-2), &QLineEdit::editingFinished, this, &CollectionEditorWidget::added);
+    auto ingr = Ingredient("new", 0);
+    addNew(ingr);
     _lastWidget->setFocus();
-}
-
-void CollectionEditorWidget::added() {
-    auto lines = findChildren<QLineEdit *>();
-    newName = lines.at(lines.count()-2)->text();
-    emit itemAdded(newName);
-    lines.at(lines.count()-1)->setFocus();
 }
 
 void CollectionEditorWidget::addNew(Ingredient ingr) {
@@ -98,6 +86,13 @@ void CollectionEditorWidget::addNew(Ingredient ingr) {
         lines.at(lines.count()-2)->setText(ingr.name());
         lines.at(lines.count()-1)->setText(QString::number(ingr.calories()));
     }
+}
+
+void CollectionEditorWidget::added() {
+    auto lines = findChildren<QLineEdit *>();
+    newName = lines.at(lines.count()-2)->text();
+    emit itemAdded(newName);
+    lines.at(lines.count()-1)->setFocus();
 }
 
 void CollectionEditorWidget::removeSelected() {
