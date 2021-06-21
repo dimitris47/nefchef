@@ -349,14 +349,12 @@ void MainWindow::showDropList() {
 void MainWindow::on_actionAddFromList_triggered() {
     Combo combo(this);
     int ret = combo.exec();
-    if (ret==QDialog::Rejected) {
+    if (ret == QDialog::Rejected) {
         auto widgets = editor->findChildren<QLineEdit *>();
         if (widgets.isEmpty())
             return;
     }
-    currentFile = ":/temp.rcp";
     editor->addNew(combo.getNewIng());
-    editor->added();
     editor->setModified(true);
 }
 

@@ -16,7 +16,6 @@ public:
     explicit CollectionEditorWidget(QWidget *parent = nullptr);
     ~CollectionEditorWidget() override {}
     void updateDisplay() override;
-    void added();
     void addNew(Ingredient);
     inline bool isModified() const { return _modified; }
     inline void setModified(bool modified) { _modified = modified; }
