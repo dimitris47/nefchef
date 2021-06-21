@@ -4,7 +4,7 @@
 #include <QString>
 
 const QString APPNAME("NefChef");
-const QString VERSION("2.4");
+const QString VERSION("2.5");
 const QString CONTRIBUTORS("Dimitris Psathas, Asterios Dimitriou");
 const QString APPINFO("Program created by Dimitris Psathas<br/><br/>"
                       "Special contributor: Asterios Dimitriou<br/><br/>"

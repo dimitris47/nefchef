@@ -81,10 +81,9 @@ void CollectionEditorWidget::addNew(Ingredient ingr) {
         updateDisplay();
         Ingredients::ingredients = _tmpIngredients;
         _modified = true;
-        auto lines = findChildren<QLineEdit *>();
-        connect(lines.at(lines.count()-2), &QLineEdit::editingFinished, this, &CollectionEditorWidget::added);
-        lines.at(lines.count()-2)->setText(ingr.name());
-        lines.at(lines.count()-1)->setText(QString::number(ingr.calories()));
+        emit itemAdded(ingr.name());
+        auto lines = _lastWidget->findChildren<QLineEdit *>();
+        connect(lines.at(1), &QLineEdit::editingFinished, this, &CollectionEditorWidget::editorChanged);
     }
 }
 
