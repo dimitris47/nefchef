@@ -82,8 +82,6 @@ void CollectionEditorWidget::addNew(Ingredient ingr) {
         Ingredients::ingredients = _tmpIngredients;
         _modified = true;
         emit itemAdded(ingr.name());
-        auto lines = _lastWidget->findChildren<QLineEdit *>();
-        connect(lines.at(1), &QLineEdit::editingFinished, this, &CollectionEditorWidget::editorChanged);
     }
 }
 
@@ -95,9 +93,9 @@ void CollectionEditorWidget::removeSelected() {
     for (auto &&widget : caloriesWidgets)
         if (widget->isSelected())
             selections.append(caloriesWidgets.indexOf(widget));
-    if (selections.count() == caloriesWidgets.count())
+    if (selections.count() == caloriesWidgets.count()) {
         selections.clear();
-    else
+    } else {
         for (auto &&widget : caloriesWidgets)
             if (widget->isSelected()) {
                 _tmpIngredients.removeOne(widget->ingredient());
@@ -105,6 +103,7 @@ void CollectionEditorWidget::removeSelected() {
                 Ingredients::ingredients = _tmpIngredients;
                 _modified = true;
             }
+    }
     emit itemRemoved(selections);
 }
 

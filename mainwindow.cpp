@@ -132,7 +132,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(calculator, &MassCalculatorWidget::refresh,         this, &MainWindow::refreshCalc);
     connect(calculator, &MassCalculatorWidget::refreshMasses,   this, &MainWindow::refreshCalcMasses);
-    connect(editor,     &CollectionEditorWidget::editorChanged, this, [this]() { calculator->updateDisplay(); });
+    connect(editor,     &CollectionEditorWidget::editorChanged, this, [this]() {
+        calculator->updateDisplay();
+        updateExtendedList();
+    });
     connect(editor,     &CollectionEditorWidget::itemAdded,     this, &MainWindow::addToCalc);
     connect(editor,     &CollectionEditorWidget::itemClimbed,   this, &MainWindow::calcClimb);
     connect(editor,     &CollectionEditorWidget::itemDescended, this, &MainWindow::calcDescend);
@@ -767,9 +770,9 @@ void MainWindow::infoPopup() {
 void MainWindow::readSettings() {
     QSettings settings;
     bool isMax = settings.value("isMaximized", false).toBool();
-    if (isMax)
+    if (isMax) {
         showMaximized();
-    else {
+    } else {
         const QByteArray geometry = settings.value("geometry", QByteArray()).toByteArray();
         restoreGeometry(geometry);
     }
@@ -780,19 +783,20 @@ void MainWindow::readSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+    updateExtendedList();
     if (editor->isModified() || calculator->isModified()) {
         const QMessageBox::StandardButton ret
             = QMessageBox::warning(this, QApplication::applicationName(),
                                    tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
-                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+                                      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         switch (ret) {
         case QMessageBox::Save:
             if (!on_actionSaveRecipe_triggered()) {
                 event->ignore();
                 return;
-            }
-            else
+            } else {
                 event->accept();
+            }
             break;
         case QMessageBox::Cancel:
             event->ignore();

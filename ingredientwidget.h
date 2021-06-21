@@ -17,13 +17,13 @@ public:
     ~IngredientWidget() override;
     void setCaloriesValidator(const QValidator* validator);
     Ingredient ingredient() const;
-    void setIngredient(const Ingredient& ingr);
+    void setIngredient(const Ingredient &ingr);
     bool isSelected() const;
     void setFocus();
     void setHeaderVisible(bool visible);
 
 signals:
-    void ingredientChanged(const Ingredient& ingr);
+    void ingredientChanged(const Ingredient &ingr);
     void stateChanged();
 
 private slots:
