@@ -303,6 +303,19 @@ void MainWindow::showStart() {
 }
 
 void MainWindow::showCalculator() {
+    if (editor->isModified()) {
+        const QMessageBox::StandardButton ret
+            = QMessageBox::warning(this, QApplication::applicationName(),
+                                   tr("Θέλετε να ενημερώσετε τη συνταγή με τις αλλαγές στα συστατικά;.\n"),
+                                      QMessageBox::Yes | QMessageBox::No);
+        switch (ret) {
+        case QMessageBox::Yes:
+            on_actionSaveRecipe_triggered();
+            break;
+        default:
+            break;
+        }
+    }
     stackedWidget->setCurrentWidget(calculator);
     ui->actionAdaptor->setEnabled(true);
     calculator->updateDisplay();
