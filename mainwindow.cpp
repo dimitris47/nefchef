@@ -304,10 +304,14 @@ void MainWindow::showStart() {
 
 void MainWindow::showCalculator() {
     if (editor->isModified()) {
-        const QMessageBox::StandardButton ret
-            = QMessageBox::warning(this, QApplication::applicationName(),
-                                   tr("Θέλετε να ενημερώσετε τη συνταγή με τις αλλαγές στα συστατικά;.\n"),
-                                      QMessageBox::Yes | QMessageBox::No);
+        QMessageBox box(QMessageBox::Warning,QApplication::applicationName(),
+                        tr("Θέλετε να ενημερώσετε την τρέχουσα συνταγή με τις τελευταίες αλλαγές;\n"),
+                        QMessageBox::Yes | QMessageBox::No,
+                        this);
+        box.setButtonText(QMessageBox::Yes, tr("Ναι"));
+        box.setButtonText(QMessageBox::No, tr("Όχι"));
+
+        const auto &ret = box.exec();
         switch (ret) {
         case QMessageBox::Yes:
             on_actionSaveRecipe_triggered();
@@ -328,10 +332,15 @@ void MainWindow::showEditor() {
 
 void MainWindow::showDropList() {
     if (editor->isModified() || calculator->isModified()) {
-        const QMessageBox::StandardButton ret
-            = QMessageBox::warning(this, QApplication::applicationName(),
-                                   tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
-                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        QMessageBox box(QMessageBox::Warning,QApplication::applicationName(),
+                        tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
+                        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                        this);
+        box.setButtonText(QMessageBox::Save, tr("Αποθήκευση"));
+        box.setButtonText(QMessageBox::Discard, tr("Απόρριψη"));
+        box.setButtonText(QMessageBox::Cancel, tr("Ακύρωση"));
+
+        const auto &ret = box.exec();
         switch (ret) {
         case QMessageBox::Save:
             on_actionSaveRecipe_triggered();
@@ -454,10 +463,14 @@ void MainWindow::on_actionAdaptor_triggered() {
             else {
                 int newMass = line->text().toInt() * adaptor->getFrac();
                 if (newMass == 0) {
-                    const QMessageBox::StandardButton ret
-                        = QMessageBox::warning(nullptr, QApplication::applicationName(),
-                                               tr("Μετά τη μετατροπή θα υπάρξουν συστατικά με μηδενική δοσολογία.\n"),
-                                                  QMessageBox::Cancel | QMessageBox::Ignore);
+                    QMessageBox box(QMessageBox::Warning,QApplication::applicationName(),
+                                    tr("Μετά τη μετατροπή θα υπάρξουν συστατικά με μηδενική δοσολογία.\n"),
+                                    QMessageBox::Cancel | QMessageBox::Ignore,
+                                    nullptr);
+                    box.setButtonText(QMessageBox::Cancel, tr("Ακύρωση"));
+                    box.setButtonText(QMessageBox::Ignore, tr("Εντάξει"));
+
+                    const auto &ret = box.exec();
                     switch (ret) {
                     case QMessageBox::Cancel:
                         return;
@@ -619,10 +632,15 @@ bool MainWindow::on_actionSaveRecipeAs_triggered() {
 
 void MainWindow::on_actionOpenRecipe_triggered() {
     if (editor->isModified() || calculator->isModified()) {
-        const QMessageBox::StandardButton ret
-            = QMessageBox::warning(this, QApplication::applicationName(),
-                                   tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
-                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        QMessageBox box(QMessageBox::Warning,QApplication::applicationName(),
+                        tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
+                        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                        this);
+        box.setButtonText(QMessageBox::Save, tr("Αποθήκευση"));
+        box.setButtonText(QMessageBox::Discard, tr("Απόρριψη"));
+        box.setButtonText(QMessageBox::Cancel, tr("Ακύρωση"));
+
+        const auto &ret = box.exec();
         switch (ret) {
         case QMessageBox::Save:
             on_actionSaveRecipe_triggered();
@@ -798,10 +816,15 @@ void MainWindow::readSettings() {
 void MainWindow::closeEvent(QCloseEvent *event) {
     updateExtendedList();
     if (editor->isModified() || calculator->isModified()) {
-        const QMessageBox::StandardButton ret
-            = QMessageBox::warning(this, QApplication::applicationName(),
-                                   tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
-                                      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        QMessageBox box(QMessageBox::Warning,QApplication::applicationName(),
+                        tr("Υπάρχουν αλλαγές που δεν αποθηκεύτηκαν.\n"),
+                        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                        this);
+        box.setButtonText(QMessageBox::Save, tr("Αποθήκευση"));
+        box.setButtonText(QMessageBox::Discard, tr("Απόρριψη"));
+        box.setButtonText(QMessageBox::Cancel, tr("Ακύρωση"));
+
+        const auto &ret = box.exec();
         switch (ret) {
         case QMessageBox::Save:
             if (!on_actionSaveRecipe_triggered()) {
