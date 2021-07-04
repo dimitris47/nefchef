@@ -399,7 +399,7 @@ void MainWindow::updateExtendedList() {
     QList<Ingredient> combIngr;
     while (!in.atEnd()) {
         QString line = in.readLine();
-        QStringList pair = line.split('=');
+        QStringList pair = line.split(" = ");
         QString name = pair.first();
         int calories = pair.last().toInt();
         Ingredient ingr;
@@ -418,7 +418,7 @@ void MainWindow::updateExtendedList() {
     QList<Ingredient> extIngr;
     while (!extdata.atEnd()) {
         QString extline = extdata.readLine();
-        QStringList extpair = extline.split('=');
+        QStringList extpair = extline.split(" = ");
         QString extname = extpair.first();
         int extcalories = extpair.last().toInt();
         Ingredient extingr;
