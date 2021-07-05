@@ -794,7 +794,7 @@ void MainWindow::helpPopup() {
 
 void MainWindow::infoPopup() {
     QMessageBox::about(this, tr("Πληροφορίες προγράμματος"),
-                       (QApplication::applicationName() + " " + QApplication::applicationVersion() + "<br/><br/>" +
+                       (QApplication::applicationName() + " " + QApplication::applicationVersion() + br.repeated(2) +
                         APPINFO));
 }
 
