@@ -18,6 +18,7 @@
 
 #include "masscalculatorwidget.h"
 #include "ui_masscalculatorwidget.h"
+#include "global.h"
 #include "ingredients.h"
 #include "masslineedit.h"
 #include <QFile>
@@ -129,8 +130,7 @@ void MassCalculatorWidget::updateDisplay() {
 
     ui->caloriesGridLayout->addWidget(instruct, 0, columns() * 2 + 3, rowsPerColumn + 1, 1);
     instruct->setAttribute(Qt::WA_DeleteOnClose);
-    instruct->setPlaceholderText("Οδηγίες εκτέλεσης της συνταγής "
-                                 "(στην εξαγωγή σε PDF εισάγονται αυτόματα bullet points σε κάθε χειροκίνητη αλλαγή σειράς)");
+    instruct->setPlaceholderText(plh);
     if (columns())
         instruct->setVisible(true);
     connect(instruct, &QPlainTextEdit::textChanged, this, [=]() { _modified = true; });
@@ -195,8 +195,7 @@ void MassCalculatorWidget::updateMasses(QStringList masses) {
 
     ui->caloriesGridLayout->addWidget(instruct, 0, columns()*2+3, rowsPerColumn + 1, 1);
     instruct->setAttribute(Qt::WA_DeleteOnClose);
-    instruct->setPlaceholderText("Οδηγίες εκτέλεσης της συνταγής "
-                                 "(στην εξαγωγή σε PDF εισάγονται αυτόματα bullet points σε κάθε χειροκίνητη αλλαγή σειράς)");
+    instruct->setPlaceholderText(plh);
     if (columns())
         instruct->setVisible(true);
     connect(instruct, &QPlainTextEdit::textChanged, this, [=]() { _modified = true; });
@@ -268,8 +267,7 @@ void MassCalculatorWidget::addIngr(QString name) {
 
     ui->caloriesGridLayout->addWidget(instruct, 0, columns() * 2 + 3, rowsPerColumn + 1, 1);
     instruct->setAttribute(Qt::WA_DeleteOnClose);
-    instruct->setPlaceholderText("Οδηγίες εκτέλεσης της συνταγής "
-                                 "(στην εξαγωγή σε PDF εισάγονται αυτόματα bullet points σε κάθε χειροκίνητη αλλαγή σειράς)");
+    instruct->setPlaceholderText(plh);
     if (columns())
         instruct->setVisible(true);
     connect(instruct, &QPlainTextEdit::textChanged, this, [=]() { _modified = true; });

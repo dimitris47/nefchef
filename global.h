@@ -3,10 +3,12 @@
 
 #include <QString>
 
-const QString br = "<br/>";
 const QString APPNAME("NefChef");
 const QString VERSION("2.9.1");
 const QString CONTRIBUTORS("Dimitris Psathas, Asterios Dimitriou");
+const QString br("<br/>");
+const QString plh("Οδηγίες εκτέλεσης της συνταγής "
+                  "(στην εξαγωγή σε PDF εισάγονται αυτόματα bullet points σε κάθε χειροκίνητη αλλαγή σειράς)");
 const QString APPINFO("Program created by Dimitris Psathas" + br.repeated(2) +
                       "Special contributor: Asterios Dimitriou" + br.repeated(2) +
                       "Original idea by Nefeli Vroulli" + br.repeated(2) +
